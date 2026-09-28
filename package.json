@@ -1,0 +1,34 @@
+{
+  "name": "agents-api-labs",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test:lab30": "node --import tsx --test server/lab30.integration.test.ts",
+    "test:lab24": "node --import tsx --test server/lab24.integration.test.ts",
+    "dev": "tsx server/index.ts",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.lab6.json",
+    "build": "npm run typecheck && vite build",
+    "start": "tsx server/index.ts --production",
+    "test:lab31": "node --import tsx --test server/lab31.integration.test.ts"
+  },
+  "dependencies": {
+    "openai": "latest",
+    "prismjs": "^1.30.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "tsx": "^4.23.15"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/prismjs": "^1.26.6",
+    "@vitejs/plugin-react": "latest",
+    "typescript": "^7.0.2",
+    "vite": "latest"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
