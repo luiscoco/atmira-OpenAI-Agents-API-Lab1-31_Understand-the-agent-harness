@@ -31,6 +31,8 @@ import Lab29 from './Lab29.tsx';
 import Lab30 from './Lab30.tsx';
 import Lab31 from './Lab31.tsx';
 import Lab32 from './Lab32.tsx';
+import Lab33 from './Lab33.tsx';
+import Lab34 from './Lab34.tsx';
 import openaiIcon from './assets/openai.svg';
 import authorPortrait from './assets/author-portrait.png';
 
@@ -38,7 +40,7 @@ function SidebarChevron({ open }: { open: boolean }) {
   return <svg className={'sidebar-chevron' + (open ? ' open' : '')} viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4 7 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 
-const labIds = Array.from({ length: 32 }, (_, index) => `lab${index + 1}`);
+const labIds = Array.from({ length: 34 }, (_, index) => `lab${index + 1}`);
 // The open lab is kept in the URL hash, so a reload returns to it (Lab 13 relies on this).
 const initialLab = () => (typeof window !== 'undefined' && labIds.includes(window.location.hash.slice(1)) ? window.location.hash.slice(1) : 'home');
 
@@ -127,8 +129,10 @@ export default function App() {
         {harnessOpen ? <nav id="harness-menu" className="sidebar-menu" aria-label="Harness architecture and security labs">
           <button type="button" className={'sidebar-lab' + (activeLab === 'lab31' ? ' selected' : '')} aria-current={activeLab === 'lab31' ? 'page' : undefined} onClick={() => setActiveLab('lab31')}><span className="nav-number">31</span><span className="sidebar-item-copy"><strong>Understand the agent harness</strong><small>Model / Loop / Compute / Evidence</small></span></button>
           <button type="button" className={'sidebar-lab' + (activeLab === 'lab32' ? ' selected' : '')} aria-current={activeLab === 'lab32' ? 'page' : undefined} onClick={() => setActiveLab('lab32')}><span className="nav-number">32</span><span className="sidebar-item-copy"><strong>Connect a self-hosted environment</strong><small>Executor / Connection / Files</small></span></button>
+          <button type="button" className={'sidebar-lab' + (activeLab === 'lab33' ? ' selected' : '')} aria-current={activeLab === 'lab33' ? 'page' : undefined} onClick={() => setActiveLab('lab33')}><span className="nav-number">33</span><span className="sidebar-item-copy"><strong>Apply project rules with AGENTS.md</strong><small>Scope / Overrides / Evidence</small></span></button>
+          <button type="button" className={'sidebar-lab' + (activeLab === 'lab34' ? ' selected' : '')} aria-current={activeLab === 'lab34' ? 'page' : undefined} onClick={() => setActiveLab('lab34')}><span className="nav-number">34</span><span className="sidebar-item-copy"><strong>Create and discover standalone skills</strong><small>Manifest / Resources / Relevance</small></span></button>
         </nav> : null}
-        <div className="sidebar-bottom"><span className="mini-orb">◆</span><div><strong>32 implemented labs</strong><small>From first run to advanced agents</small></div></div>
+        <div className="sidebar-bottom"><span className="mini-orb">◆</span><div><strong>34 implemented labs</strong><small>From first run to advanced agents</small></div></div>
       </aside>
 
       <main className={'main' + (activeLab === 'home' ? ' main-home' : '')}>
@@ -143,7 +147,7 @@ export default function App() {
             </div>
           </div>
         </section> : null}
-        <header className="topbar"><span>COURSE / {['lab31', 'lab32'].includes(activeLab) ? 'HARNESS ARCHITECTURE & SECURITY' : ['lab26', 'lab27', 'lab28', 'lab29', 'lab30'].includes(activeLab) ? 'HOSTED ENVIRONMENTS & ARTIFACTS' : ['lab21', 'lab22', 'lab23', 'lab24', 'lab25'].includes(activeLab) ? 'SEARCH, MCP & PLUGINS' : ['lab16', 'lab17', 'lab18', 'lab19', 'lab20'].includes(activeLab) ? 'FUNCTION TOOLS & HUMAN CONTROL' : ['lab11', 'lab12', 'lab13', 'lab14', 'lab15'].includes(activeLab) ? 'STREAMING & REACT' : ['lab6', 'lab7', 'lab8', 'lab9', 'lab10'].includes(activeLab) ? 'TYPESCRIPT & CONFIGURATION' : 'FOUNDATIONS'} / <b>LAB {activeLab.slice(3).padStart(2, '0')}</b></span><span className="top-right"><span className="status-dot" /> INTERACTIVE LAB</span></header>
+        <header className="topbar"><span>COURSE / {['lab31', 'lab32', 'lab33', 'lab34'].includes(activeLab) ? 'HARNESS ARCHITECTURE & SECURITY' : ['lab26', 'lab27', 'lab28', 'lab29', 'lab30'].includes(activeLab) ? 'HOSTED ENVIRONMENTS & ARTIFACTS' : ['lab21', 'lab22', 'lab23', 'lab24', 'lab25'].includes(activeLab) ? 'SEARCH, MCP & PLUGINS' : ['lab16', 'lab17', 'lab18', 'lab19', 'lab20'].includes(activeLab) ? 'FUNCTION TOOLS & HUMAN CONTROL' : ['lab11', 'lab12', 'lab13', 'lab14', 'lab15'].includes(activeLab) ? 'STREAMING & REACT' : ['lab6', 'lab7', 'lab8', 'lab9', 'lab10'].includes(activeLab) ? 'TYPESCRIPT & CONFIGURATION' : 'FOUNDATIONS'} / <b>LAB {activeLab.slice(3).padStart(2, '0')}</b></span><span className="top-right"><span className="status-dot" /> INTERACTIVE LAB</span></header>
         <nav className="mobile-lab-nav" aria-label="Choose a lab">{labIds.map(id => <button type="button" key={id} aria-current={activeLab === id ? 'page' : undefined} onClick={() => setActiveLab(id)}>Lab {id.slice(3).padStart(2, '0')}</button>)}</nav>
         <div className="content" style={{ display: activeLab === 'lab1' ? undefined : 'none' }}><Lab1 active={activeLab === 'lab1'} health={health} /></div>
         <div className="content" style={{ display: activeLab === 'lab2' ? undefined : 'none' }}><Lab2 active={activeLab === 'lab2'} feature={lab2Feature} onFeatureChange={setLab2Feature} health={health} /></div>
@@ -177,6 +181,8 @@ export default function App() {
         <div className="content" style={{ display: activeLab === 'lab30' ? undefined : 'none' }}><Lab30 active={activeLab === 'lab30'} health={health} /></div>
         <div className="content" style={{ display: activeLab === 'lab31' ? undefined : 'none' }}><Lab31 active={activeLab === 'lab31'} health={health} /></div>
         <div className="content" style={{ display: activeLab === 'lab32' ? undefined : 'none' }}><Lab32 active={activeLab === 'lab32'} /></div>
+        <div className="content" style={{ display: activeLab === 'lab33' ? undefined : 'none' }}><Lab33 active={activeLab === 'lab33'} /></div>
+        <div className="content" style={{ display: activeLab === 'lab34' ? undefined : 'none' }}><Lab34 active={activeLab === 'lab34'} /></div>
       </main>
     </div>
   );

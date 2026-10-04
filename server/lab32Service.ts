@@ -13,9 +13,9 @@ export type ExecutorJob = {
   id: string; status: 'running' | 'finished'; trace: ExecutorTrace;
   containerName: string; sessionCleanup: 'not created' | 'not started' | 'deleted' | 'failed';
 };
-export function createExecutorJob(id: string): ExecutorJob {
+export function createExecutorJob(id: string, lab: 32 | 34 = 32): ExecutorJob {
   return { id, status: 'running', trace: newExecutorTrace(randomBytes(8).toString('hex')),
-    containerName: `agents-lab32-${randomBytes(16).toString('hex')}`, sessionCleanup: 'not created' };
+    containerName: `agents-lab${lab}-${randomBytes(16).toString('hex')}`, sessionCleanup: 'not created' };
 }
 function aborted<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ export function publicExecutorJob(job: ExecutorJob, secrets: string[]): Executor
   for (const secret of secrets.filter(Boolean)) json = json.split(JSON.stringify(secret).slice(1, -1)).join('[redacted]');
   return JSON.parse(json);
 }
-export async function executeListing(job: ExecutorJob, api: ExecutorApi, provider: ExecutorProvider, controller: AbortController, limits = { runMs: 300_000, connectMs: 120_000 }) {
+export async function executeListing(job: ExecutorJob, api: ExecutorApi, provider: ExecutorProvider, controller: AbortController, limits = { runMs: 300_000, connectMs: 120_000 }, promptFor = listingPrompt) {
   const trace = job.trace; const started = Date.now(); const signal = controller.signal;
   let stream: (AsyncIterable<unknown> & { controller?: AbortController }) | undefined;
   let computeAttempted = false; let sent = false;
@@ -69,7 +69,7 @@ export async function executeListing(job: ExecutorJob, api: ExecutorApi, provide
       if (event.type === 'agent.session.environment.connected' && !sent) {
         sent = true; clearTimeout(connectionTimer);
         trace.inputMs = ms();
-        await api.input(session.id, listingPrompt(trace.nonce), signal);
+        await api.input(session.id, promptFor(trace.nonce), signal);
         trace.inputSent = true;
       }
       const item = object(event.item);

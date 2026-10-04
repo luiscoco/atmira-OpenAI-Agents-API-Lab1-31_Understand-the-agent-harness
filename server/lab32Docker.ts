@@ -7,22 +7,22 @@ export type ExecutorProvider = {
   start(spec: ExecutorSpec): Promise<void>;
   remove(name: string): Promise<void>;
 };
-export function validContainerName(name: string) { return /^agents-lab32-[a-f0-9]{32}$/.test(name); }
-export function executorArgs(spec: ExecutorSpec) {
-  if (!validContainerName(spec.name) || !/^[a-f0-9]{16}$/.test(spec.nonce) || !/^[a-zA-Z0-9_-]{1,200}$/.test(spec.environmentId)) throw new Error('Invalid executor spec.');
+export function validContainerName(name: string, lab: 32 | 34 = 32) { return new RegExp(`^agents-lab${lab}-[a-f0-9]{32}$`).test(name); }
+export function executorArgs(spec: ExecutorSpec, lab: 32 | 34 = 32, image = executorImage) {
+  if (!validContainerName(spec.name, lab) || !/^[a-f0-9]{16}$/.test(spec.nonce) || !/^[a-zA-Z0-9_-]{1,200}$/.test(spec.environmentId)) throw new Error('Invalid executor spec.');
   const url = new URL(spec.remoteUrl);
   const allowedEndpoint = (url.protocol === 'wss:' && url.hostname === 'codex-cloud-environments.chatgpt.com') ||
     (url.protocol === 'https:' && url.hostname === 'api.openai.com');
   if (!allowedEndpoint || url.username || url.password || url.port || url.hash) throw new Error('Unexpected executor connection host.');
   // Pass the API-returned URL unchanged, as an argv value, never as shell source.
-  return ['run', '-d', '--name', spec.name, '--label', 'agents.course.lab=32',
+  return ['run', '-d', '--name', spec.name, '--label', `agents.course.lab=${lab}`,
     '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
     '--pids-limit', '128', '--memory', '512m', '--cpus', '1',
     '--tmpfs', '/tmp:rw,nosuid,nodev,size=128m,uid=1000,gid=1000',
     '--tmpfs', '/home/node:rw,nosuid,nodev,size=32m,uid=1000,gid=1000',
     '--tmpfs', '/workspace:rw,nosuid,nodev,size=16m,uid=1000,gid=1000',
     '-e', 'CODEX_API_KEY', '-e', 'LAB32_NONCE', '-e', 'HOME=/home/node',
-    executorImage, '--remote', spec.remoteUrl, '--environment-id', spec.environmentId];
+    image, '--remote', spec.remoteUrl, '--environment-id', spec.environmentId];
 }
 function docker(args: string[], extra: Record<string, string> = {}): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -47,12 +47,12 @@ function docker(args: string[], extra: Record<string, string> = {}): Promise<str
     });
   });
 }
-export function dockerExecutor(executorKey: string): ExecutorProvider {
+export function dockerExecutor(executorKey: string, lab: 32 | 34 = 32, image = executorImage): ExecutorProvider {
   return {
-    preflight: async () => { await docker(['image', 'inspect', executorImage, '--format', '{{.Id}}']); },
-    start: async spec => { await docker(executorArgs(spec), { CODEX_API_KEY: executorKey, LAB32_NONCE: spec.nonce }); },
+    preflight: async () => { await docker(['image', 'inspect', image, '--format', '{{.Id}}']); },
+    start: async spec => { await docker(executorArgs(spec, lab, image), { CODEX_API_KEY: executorKey, LAB32_NONCE: spec.nonce }); },
     remove: async name => {
-      if (!validContainerName(name)) throw new Error('Invalid cleanup target.');
+      if (!validContainerName(name, lab)) throw new Error('Invalid cleanup target.');
       await docker(['rm', '-f', name]);
       const names = await docker(['ps', '-a', '--filter', `name=^/${name}$`, '--format', '{{.Names}}']);
       if (names.split('\n').includes(name)) throw new Error('Container removal was not confirmed.');

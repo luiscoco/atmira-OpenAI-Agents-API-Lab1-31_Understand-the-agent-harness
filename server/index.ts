@@ -32,6 +32,8 @@ import { runLab29, artifactLab29, deleteLab29, testLab29 } from './lab29.ts';
 import { handleLab30 } from './lab30.ts';
 import { handleLab31 } from './lab31.ts';
 import { handleLab32, stopLab32 } from './lab32.ts';
+import { handleLab33 } from './lab33.ts';
+import { handleLab34, stopLab34 } from './lab34.ts';
 
 const root = resolve(import.meta.dirname, '..');
 const dist = join(root, 'build');
@@ -624,6 +626,14 @@ server.on('request', async (request, response) => {
     await handleLab32(request, response, path);
     return;
   }
+  if (path.startsWith('/api/lab33/')) {
+    await handleLab33(request, response, path);
+    return;
+  }
+  if (path.startsWith('/api/lab34/')) {
+    await handleLab34(request, response, path);
+    return;
+  }
   if (path.startsWith('/api/')) {
     sendJson(response, 404, { error: 'API route not found.' });
     return;
@@ -651,5 +661,5 @@ server.listen(port, () => console.log(`Agent Labs running at http://localhost:${
 startPrivateMcp();
 for (const signal of ['SIGINT', 'SIGTERM'] as const) process.once(signal, () => {
   const deadline = setTimeout(() => process.exit(1), 45_000);
-  void stopLab32().finally(() => { clearTimeout(deadline); process.exit(0); });
+  void Promise.allSettled([stopLab32(), stopLab34()]).finally(() => { clearTimeout(deadline); process.exit(0); });
 });

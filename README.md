@@ -1,10 +1,10 @@
-# OpenAI Agents API: Labs 01–32
+# OpenAI Agents API: Labs 01–34
 
-This React and Node app introduces the OpenAI Agents API through thirty-two hands-on labs. The Node server keeps the API key private and streams agent responses to the browser.
+This React and Node app introduces the OpenAI Agents API through thirty-four hands-on labs. The Node server keeps the API key private and streams agent responses to the browser.
 
 ## How it was built — step by step
 
-This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–32 are implemented; the later course units in [CURRICULUM.md](CURRICULUM.md) remain planned.
+This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–34 are implemented; the later course units in [CURRICULUM.md](CURRICULUM.md) remain planned.
 
 ### 1. Build the React and Node shell
 
@@ -184,3 +184,11 @@ Explore an annotated architecture diagram and six synthetic ownership traces. Co
 ## Lab 32 — Connect a self-hosted environment
 
 Connect the official `codex exec-server` in a disposable local Docker container. The server creates a self-hosted session, subscribes before starting compute, and sends a fixed file task once the environment connects. Verify command output, a hidden file, the exact JSON inventory, and a fresh nonce. Background jobs survive browser navigation, use bounded deadlines, and track container removal separately from API session deletion. Six synthetic practice cases, browser/server rule checks, integration tests, and six explained snippets with Viva voice work without live credentials. Live execution requires Docker and a separate restricted environment key. See [LAB32.md](LAB32.md) for setup and the student challenge.
+
+## Lab 33 — Apply project rules with AGENTS.md
+
+Explore repository instruction discovery, scoped overrides, empty files, and configured fallbacks. Write root guidance and compare reports against independently checked conventions and revenue. A labelled synthetic comparison works offline; the optional live Agents API comparison explicitly loads fixture sources through `agent.instructions` and produces proposed file content without filesystem tools. Download a fresh Codex workspace scaffold to verify native discovery and a real report file separately. Export evidence, run browser/server and integration tests, and read six explained snippets with Viva voice. See [LAB33.md](LAB33.md) for the walkthrough and runtime boundaries.
+
+## Lab 34 — Create and discover standalone skills
+
+Author a focused SKILL.md and inspect its supporting reference and exact-cents helper. Register the immutable skill parent in a self-hosted sandbox through `environment.capability_directories`. Compare relevant, unrelated and unregistered runs with captured read/helper command evidence, independent totals and a fresh marker. Five labelled synthetic cases, browser/server checks and six Viva voice lessons work without credentials. Live runs use a separate disposable Docker image and the restricted environment key from Lab 32. See [LAB34.md](LAB34.md) for setup, validation and the student challenge.

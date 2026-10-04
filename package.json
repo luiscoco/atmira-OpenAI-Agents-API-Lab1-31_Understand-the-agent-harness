@@ -12,6 +12,9 @@
     "start": "tsx server/index.ts --production",
     "test:lab31": "node --import tsx --test server/lab31.integration.test.ts",
     "test:lab32": "node --import tsx --test server/lab32.integration.test.ts",
+    "test:lab33": "node --import tsx --test server/lab33.integration.test.ts",
+    "test:lab34": "node --import tsx --test server/lab34.integration.test.ts",
+    "lab34:image": "docker build --tag agents-lab34-executor:local sandbox/lab34",
     "lab32:image": "docker build --tag agents-lab32-executor:local sandbox/lab32"
   },
   "dependencies": {

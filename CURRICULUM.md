@@ -1,12 +1,12 @@
 # OpenAI Agents API with React — 56 hands-on labs
 
-This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–32 are implemented in this repository. Labs 33–56 are planned.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
+This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–34 are implemented in this repository. Labs 35–56 are planned.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
 
 **Recording target: 125 video lessons, approximately 12 hours.** A lab is a practical learning unit; a video lesson is a recording unit. The recording plan adds short explanations alongside the labs and expands Lab 56 into an integrated application project. These counts and durations are course planning targets, not Udemy platform requirements. The complete ordered video schedule is in [COURSE_RECORDING_PLAN.md](COURSE_RECORDING_PLAN.md).
 
 ## How it was built — step by step
 
-This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB32.md`. Labs 33–56 below are plans.
+This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB34.md`. Labs 35–56 below are plans.
 
 ### 1. Establish one runnable application
 
@@ -73,11 +73,11 @@ Status refers to lessons in this repository, not product availability. All plann
 
 | Capability | Lessons | Runtime or product | Status |
 | --- | --- | --- | --- |
-| Rules / `AGENTS.md` | 33; applied again in 38 | Codex project instructions, with explicit verification of any Agents API loading path | Planned |
+| Rules / `AGENTS.md` | 33; applied again in 38 | Codex project discovery exercise and explicit application-loaded API guidance | 33 implemented; 38 planned |
 | Subagents | 39–43 | Agents API multi-agent orchestration | Planned |
 | MCP | 22–24; 36 | Agents API service-origin and environment-origin MCP | 22–24 implemented; 36 planned |
 | WebMCP | 46 | Website tools in a compatible ChatGPT Work / Codex browser; optional adjacent integration | Planned |
-| Skills | 25; 34; applied again in 38 | Agents API sandbox skills and capability directories | Plugin-bundled skill implemented in 25; standalone skills planned in 34 |
+| Skills | 25; 34; applied again in 38 | Agents API sandbox skills and capability directories | Plugin-bundled skill implemented in 25; standalone skill implemented in 34 |
 | Hooks | 45; compared with webhooks in 44 | Codex lifecycle hooks; application callbacks explained separately | Planned |
 | Plugins | 25; reinforced in 34 and 45 | Agents API environment plugins; Codex hook packaging is runtime-specific | Skill + MCP packaging implemented; extensions planned |
 | Harnesses | 31; 52–53 | Managed Agents API execution harness; separate course-owned evaluation harness | 31 implemented; evaluation harnesses planned |
@@ -159,7 +159,7 @@ Status refers to lessons in this repository, not product availability. All plann
 
 ## Stage 7 — Harness architecture, self-hosted environments, and security (Labs 31–38)
 
-**Implementation status:** [Lab 31](LAB31.md) and [Lab 32](LAB32.md) are implemented with architecture practice, executor lifecycle inspection, explained snippets, and Viva voice. Labs 33–38 remain planned. Live Lab 32 evidence requires Docker and correctly scoped credentials.
+**Implementation status:** [Lab 31](LAB31.md) and [Lab 32](LAB32.md) are implemented with architecture practice, executor lifecycle inspection, explained snippets, and Viva voice. Lab 33 is implemented with project-rule discovery, an explicit API instruction-loading comparison, and a native Codex workspace exercise. Lab 34 is implemented with standalone skill authoring, capability registration and self-hosted read/helper evidence. Labs 35–38 remain planned. Live Lab 32 evidence requires Docker and correctly scoped credentials.
 
 **Checkpoint:** students explain the execution architecture, then run a file task with project guidance, a reusable skill, and enforced access limits. References: [Agents API architecture](https://developers.openai.com/api/docs/guides/agents-api/architecture), [self-hosted sandboxes](https://developers.openai.com/api/docs/guides/agents-api/environments/self-hosted), [sandbox security](https://developers.openai.com/api/docs/guides/agents-api/environments/security), [Codex project instructions](https://learn.chatgpt.com/docs/agent-configuration/agents-md), and [Agent Skills](https://developers.openai.com/api/docs/guides/tools-skills).
 
@@ -167,8 +167,8 @@ Status refers to lessons in this repository, not product availability. All plann
 | --- | --- | --- |
 | **31. Understand the agent harness** | Explain the model, managed harness, application server, and sandbox; compare Agents API, Agents SDK, and Responses API ownership of orchestration and state. | An annotated architecture diagram and a session trace identifying which component performs each step. |
 | **32. Connect a self-hosted environment** | Supply an executor and observe the environment connection lifecycle. | A file-listing task in a disposable local sandbox. |
-| **33. Apply project rules with AGENTS.md** | Write repository guidance, compare directory scope and precedence in Codex, and verify how the selected runtime loads instructions; distinguish guidance from enforced permissions. | A file task follows repository conventions, with recorded instruction sources and a scoped override comparison. |
-| **34. Create and discover standalone skills** | Author `SKILL.md`, add references and scripts, register `environment.capability_directories` in a self-hosted Agents API sandbox, and compare standalone skills with plugin-bundled skills from Lab 25. | A reusable report skill is discovered and read for a relevant task; an unrelated task checks unnecessary activation, with tool or file-read evidence. |
+| **33. Apply project rules with AGENTS.md** *(implemented)* | Write repository guidance, compare directory scope and precedence in Codex, and verify how the selected runtime loads instructions; distinguish guidance from enforced permissions. | A file task follows repository conventions, with recorded instruction sources and a scoped override comparison. |
+| **34. Create and discover standalone skills** *(implemented)* | Author `SKILL.md`, add references and scripts, register `environment.capability_directories` in a self-hosted Agents API sandbox, and compare standalone skills with plugin-bundled skills from Lab 25. | A reusable report skill is discovered and read for a relevant task; an unrelated task checks unnecessary activation, with tool or file-read evidence. |
 | **35. Limit filesystem access** | Give the agent only the files and paths needed for its task; enforce access outside prompt instructions. | An access test that succeeds in the workspace and fails outside it, even when the prompt requests broader access. |
 | **36. Run an environment-origin MCP server** | Connect a private or local MCP server from the environment. | A tool call that cannot be made from the public network. |
 | **37. Recover an environment failure** | Handle connection loss, setup errors, and resumable session state. | A clear retry or recovery path in the UI. |
