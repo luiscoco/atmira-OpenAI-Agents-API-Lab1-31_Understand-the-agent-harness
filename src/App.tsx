@@ -31,6 +31,7 @@ import Lab29 from './Lab29.tsx';
 import Lab30 from './Lab30.tsx';
 import Lab31 from './Lab31.tsx';
 import openaiIcon from './assets/openai.svg';
+import authorPortrait from './assets/author-portrait.png';
 
 function SidebarChevron({ open }: { open: boolean }) {
   return <svg className={'sidebar-chevron' + (open ? ' open' : '')} viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4 7 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
@@ -38,19 +39,19 @@ function SidebarChevron({ open }: { open: boolean }) {
 
 const labIds = Array.from({ length: 31 }, (_, index) => `lab${index + 1}`);
 // The open lab is kept in the URL hash, so a reload returns to it (Lab 13 relies on this).
-const initialLab = () => (typeof window !== 'undefined' && labIds.includes(window.location.hash.slice(1)) ? window.location.hash.slice(1) : 'lab1');
+const initialLab = () => (typeof window !== 'undefined' && labIds.includes(window.location.hash.slice(1)) ? window.location.hash.slice(1) : 'home');
 
 export default function App() {
   const [activeLab, setActiveLab] = useState(initialLab);
   const [lab2Feature, setLab2Feature] = useState('conversation');
-  const [foundationsOpen, setFoundationsOpen] = useState(true);
-  const [typescriptOpen, setTypescriptOpen] = useState(true);
-  const [streamingOpen, setStreamingOpen] = useState(true);
-  const [toolsOpen, setToolsOpen] = useState(true);
-  const [searchOpen, setSearchOpen] = useState(true);
-  const [hostedOpen, setHostedOpen] = useState(true);
-  const [harnessOpen, setHarnessOpen] = useState(true);
-  const [lab2Open, setLab2Open] = useState(true);
+  const [foundationsOpen, setFoundationsOpen] = useState(false);
+  const [typescriptOpen, setTypescriptOpen] = useState(false);
+  const [streamingOpen, setStreamingOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [hostedOpen, setHostedOpen] = useState(false);
+  const [harnessOpen, setHarnessOpen] = useState(false);
+  const [lab2Open, setLab2Open] = useState(false);
   const [health, setHealth] = useState(null);
 
   useEffect(() => { window.history.replaceState(null, '', `#${activeLab}`); }, [activeLab]);
@@ -63,9 +64,9 @@ export default function App() {
   }, []);
 
   return (
-    <div className="app-shell">
+    <div className={'app-shell' + (activeLab === 'home' ? ' home-shell' : '')}>
       <aside className="sidebar">
-        <div className="brand"><span className="brand-mark"><img src={openaiIcon} alt="" /></span><span className="brand-copy">OpenAI Agents API Labs<small>THE LEARNING SERIES</small></span></div>
+        <button type="button" className="brand brand-button" onClick={() => setActiveLab('home')} aria-label="Open home page"><span className="brand-mark"><img src={openaiIcon} alt="" /></span><span className="brand-copy">OpenAI Agents API Labs<small>THE LEARNING SERIES</small></span></button>
         <button type="button" className="sidebar-section-toggle" aria-expanded={foundationsOpen} aria-controls="foundations-menu" onClick={() => setFoundationsOpen((open) => !open)}><span>FOUNDATIONS</span><SidebarChevron open={foundationsOpen} /></button>
         {foundationsOpen ? <nav id="foundations-menu" className="sidebar-menu" aria-label="Foundation labs">
           <button type="button" className={'sidebar-lab' + (activeLab === 'lab1' ? ' selected' : '')} aria-current={activeLab === 'lab1' ? 'page' : undefined} onClick={() => setActiveLab('lab1')}><span className="nav-number">01</span><span className="sidebar-item-copy"><strong>Create your first agent</strong><small>Agent · Session · Run</small></span></button>
@@ -128,7 +129,18 @@ export default function App() {
         <div className="sidebar-bottom"><span className="mini-orb">◆</span><div><strong>31 implemented labs</strong><small>From first run to advanced agents</small></div></div>
       </aside>
 
-      <main className="main">
+      <main className={'main' + (activeLab === 'home' ? ' main-home' : '')}>
+        <button type="button" className="mobile-home-link" aria-current={activeLab === 'home' ? 'page' : undefined} onClick={() => setActiveLab('home')}>Home</button>
+        {activeLab === 'home' ? <section className="home-page" aria-labelledby="home-title">
+          <div className="home-art">
+            <button type="button" className="home-enter" onClick={() => setActiveLab('lab1')} aria-label="Open the labs"><img className="home-logo" src={openaiIcon} alt="" /></button>
+            <h1 id="home-title">OpenAI Agents API</h1>
+            <div className="home-author">
+              <div className="home-portrait"><img src={authorPortrait} alt="Luis Coco Enríquez" /></div>
+              <div className="home-author-label"><span className="home-author-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="8"/><path d="M9 40v-4c0-8 6-13 15-13s15 5 15 13v4z"/></svg></span><span>Author: Luis Coco Enríquez</span></div>
+            </div>
+          </div>
+        </section> : null}
         <header className="topbar"><span>COURSE / {activeLab === 'lab31' ? 'HARNESS ARCHITECTURE & SECURITY' : ['lab26', 'lab27', 'lab28', 'lab29', 'lab30'].includes(activeLab) ? 'HOSTED ENVIRONMENTS & ARTIFACTS' : ['lab21', 'lab22', 'lab23', 'lab24', 'lab25'].includes(activeLab) ? 'SEARCH, MCP & PLUGINS' : ['lab16', 'lab17', 'lab18', 'lab19', 'lab20'].includes(activeLab) ? 'FUNCTION TOOLS & HUMAN CONTROL' : ['lab11', 'lab12', 'lab13', 'lab14', 'lab15'].includes(activeLab) ? 'STREAMING & REACT' : ['lab6', 'lab7', 'lab8', 'lab9', 'lab10'].includes(activeLab) ? 'TYPESCRIPT & CONFIGURATION' : 'FOUNDATIONS'} / <b>LAB {activeLab.slice(3).padStart(2, '0')}</b></span><span className="top-right"><span className="status-dot" /> INTERACTIVE LAB</span></header>
         <nav className="mobile-lab-nav" aria-label="Choose a lab"><button type="button" aria-current={activeLab === 'lab1' ? 'page' : undefined} onClick={() => setActiveLab('lab1')}>Lab 01</button><button type="button" aria-current={activeLab === 'lab2' ? 'page' : undefined} onClick={() => setActiveLab('lab2')}>Lab 02</button><button type="button" aria-current={activeLab === 'lab3' ? 'page' : undefined} onClick={() => setActiveLab('lab3')}>Lab 03</button><button type="button" aria-current={activeLab === 'lab4' ? 'page' : undefined} onClick={() => setActiveLab('lab4')}>Lab 04</button><button type="button" aria-current={activeLab === 'lab5' ? 'page' : undefined} onClick={() => setActiveLab('lab5')}>Lab 05</button><button type="button" aria-current={activeLab === 'lab6' ? 'page' : undefined} onClick={() => setActiveLab('lab6')}>Lab 06</button><button type="button" aria-current={activeLab === 'lab7' ? 'page' : undefined} onClick={() => setActiveLab('lab7')}>Lab 07</button><button type="button" aria-current={activeLab === 'lab8' ? 'page' : undefined} onClick={() => setActiveLab('lab8')}>Lab 08</button><button type="button" aria-current={activeLab === 'lab9' ? 'page' : undefined} onClick={() => setActiveLab('lab9')}>Lab 09</button><button type="button" aria-current={activeLab === 'lab10' ? 'page' : undefined} onClick={() => setActiveLab('lab10')}>Lab 10</button><button type="button" aria-current={activeLab === 'lab11' ? 'page' : undefined} onClick={() => setActiveLab('lab11')}>Lab 11</button><button type="button" aria-current={activeLab === 'lab12' ? 'page' : undefined} onClick={() => setActiveLab('lab12')}>Lab 12</button><button type="button" aria-current={activeLab === 'lab13' ? 'page' : undefined} onClick={() => setActiveLab('lab13')}>Lab 13</button><button type="button" aria-current={activeLab === 'lab14' ? 'page' : undefined} onClick={() => setActiveLab('lab14')}>Lab 14</button><button type="button" aria-current={activeLab === 'lab15' ? 'page' : undefined} onClick={() => setActiveLab('lab15')}>Lab 15</button><button type="button" aria-current={activeLab === 'lab16' ? 'page' : undefined} onClick={() => setActiveLab('lab16')}>Lab 16</button><button type="button" aria-current={activeLab === 'lab17' ? 'page' : undefined} onClick={() => setActiveLab('lab17')}>Lab 17</button><button type="button" aria-current={activeLab === 'lab18' ? 'page' : undefined} onClick={() => setActiveLab('lab18')}>Lab 18</button><button type="button" aria-current={activeLab === 'lab19' ? 'page' : undefined} onClick={() => setActiveLab('lab19')}>Lab 19</button><button type="button" aria-current={activeLab === 'lab20' ? 'page' : undefined} onClick={() => setActiveLab('lab20')}>Lab 20</button><button type="button" aria-current={activeLab === 'lab21' ? 'page' : undefined} onClick={() => setActiveLab('lab21')}>Lab 21</button><button type="button" aria-current={activeLab === 'lab22' ? 'page' : undefined} onClick={() => setActiveLab('lab22')}>Lab 22</button><button type="button" aria-current={activeLab === 'lab23' ? 'page' : undefined} onClick={() => setActiveLab('lab23')}>Lab 23</button><button type="button" aria-current={activeLab === 'lab24' ? 'page' : undefined} onClick={() => setActiveLab('lab24')}>Lab 24</button><button type="button" aria-current={activeLab === 'lab25' ? 'page' : undefined} onClick={() => setActiveLab('lab25')}>Lab 25</button><button type="button" aria-current={activeLab === 'lab26' ? 'page' : undefined} onClick={() => setActiveLab('lab26')}>Lab 26</button><button type="button" aria-current={activeLab === 'lab27' ? 'page' : undefined} onClick={() => setActiveLab('lab27')}>Lab 27</button><button type="button" aria-current={activeLab === 'lab28' ? 'page' : undefined} onClick={() => setActiveLab('lab28')}>Lab 28</button><button type="button" aria-current={activeLab === 'lab29' ? 'page' : undefined} onClick={() => setActiveLab('lab29')}>Lab 29</button><button type="button" aria-current={activeLab === 'lab30' ? 'page' : undefined} onClick={() => setActiveLab('lab30')}>Lab 30</button><button type="button" aria-current={activeLab === 'lab31' ? 'page' : undefined} onClick={() => setActiveLab('lab31')}>Lab 31</button></nav>
         <div className="content" style={{ display: activeLab === 'lab1' ? undefined : 'none' }}><Lab1 active={activeLab === 'lab1'} health={health} /></div>
@@ -166,4 +178,3 @@ export default function App() {
     </div>
   );
 }
-
