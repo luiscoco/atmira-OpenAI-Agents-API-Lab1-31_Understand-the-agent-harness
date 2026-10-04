@@ -92,6 +92,29 @@ test('session deletion failure is tracked independently', async () => {
   const fixture = setup([connected, complete]); fixture.api.delete = async () => { throw new Error('API unavailable'); };
   await fixture.run(); assert.equal(fixture.job.trace.cleanup, 'removed'); assert.equal(fixture.job.sessionCleanup, 'failed');
 });
+
+test('cleanup retry attempts API deletion even when container removal still fails', async () => {
+  const fixture = setup([connected, complete]);
+  fixture.provider.remove = async () => { throw new Error('daemon down'); };
+  fixture.api.delete = async () => { throw new Error('API unavailable'); };
+  await fixture.run();
+  fixture.api.delete = async () => { fixture.calls.push('delete retry'); };
+  await assert.rejects(retryExecutorCleanup(fixture.job, fixture.api, fixture.provider));
+  assert.equal(fixture.job.trace.cleanup, 'failed');
+  assert.equal(fixture.job.sessionCleanup, 'deleted');
+  assert.ok(fixture.calls.includes('delete retry'));
+});
+
+test('completed commentary removes preliminary text when the added event is absent', async () => {
+  const answer = '{"files":[],"nonce":"test"}';
+  const fixture = setup([connected,
+    { type: 'agent.session.turn.output_text.delta', item_id: 'msg_comment', content_index: 0, delta: 'I will inspect the files.' },
+    { type: 'agent.session.turn.item.done', item: { id: 'msg_comment', type: 'message', role: 'assistant', phase: 'commentary', content: [{ type: 'output_text', text: 'I will inspect the files.' }] } },
+    { type: 'agent.session.turn.item.done', item: { id: 'msg_final', type: 'message', role: 'assistant', phase: 'final_answer', content: [{ type: 'output_text', text: answer }] } },
+    complete]);
+  await fixture.run();
+  assert.equal(fixture.job.trace.answer, answer);
+});
 test('public evidence removes exact keys across split output', () => {
   const fixture = setup(); fixture.job.trace.answer = 'before restricted-secret after'; fixture.job.trace.commands.push({ id: 'cmd', command: 'echo application-secret', output: 'restricted-secret', cwd: null, exitCode: 0, durationMs: null, status: null });
   const text = JSON.stringify(publicExecutorJob(fixture.job, ['restricted-secret', 'application-secret']));
@@ -105,7 +128,14 @@ test('Docker arguments have no mounts, host network, privileged mode, or key val
 test('executor rejects shell-shaped names and unexpected connection endpoints', () => {
   const base = { name: 'agents-lab32-' + 'a'.repeat(32), nonce: 'a'.repeat(16), environmentId: 'env_test', remoteUrl: 'wss://codex-cloud-environments.chatgpt.com/test' };
   assert.throws(() => executorArgs({ ...base, name: 'other-container' }));
-  for (const remoteUrl of ['ws://codex-cloud-environments.chatgpt.com/test', 'wss://evil.test', 'wss://codex-cloud-environments.chatgpt.com.evil.test']) assert.throws(() => executorArgs({ ...base, remoteUrl }));
+  for (const remoteUrl of ['ws://codex-cloud-environments.chatgpt.com/test', 'wss://evil.test', 'wss://codex-cloud-environments.chatgpt.com.evil.test', 'http://api.openai.com/v1/agents/api', 'https://api.openai.com.evil.test/v1/agents/api', 'https://user:secret@api.openai.com/v1/agents/api', 'https://api.openai.com:8443/v1/agents/api', 'https://api.openai.com/v1/agents/api#fragment']) assert.throws(() => executorArgs({ ...base, remoteUrl }));
+});
+
+test('executor preserves the documented HTTPS remote URL including its query', () => {
+  const fixture = setup();
+  const remoteUrl = 'https://api.openai.com/v1/agents/api?token=abc%2Fdef';
+  const args = executorArgs({ name: fixture.job.containerName, nonce: fixture.job.trace.nonce, environmentId: 'env_test', remoteUrl });
+  assert.equal(args[args.indexOf('--remote') + 1], remoteUrl);
 });
 test('executor routes enforce localhost and same-origin access', () => {
   const local = { headers: { host: 'localhost:5173', origin: 'http://localhost:5173', 'sec-fetch-site': 'same-origin' }, socket: { remoteAddress: '127.0.0.1' } } as any;

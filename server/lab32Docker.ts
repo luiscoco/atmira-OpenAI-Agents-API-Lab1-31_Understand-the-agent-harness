@@ -11,14 +11,17 @@ export function validContainerName(name: string) { return /^agents-lab32-[a-f0-9
 export function executorArgs(spec: ExecutorSpec) {
   if (!validContainerName(spec.name) || !/^[a-f0-9]{16}$/.test(spec.nonce) || !/^[a-zA-Z0-9_-]{1,200}$/.test(spec.environmentId)) throw new Error('Invalid executor spec.');
   const url = new URL(spec.remoteUrl);
-  if (url.protocol !== 'wss:' || url.hostname !== 'codex-cloud-environments.chatgpt.com' || url.username || url.password || url.port) throw new Error('Unexpected executor connection host.');
+  const allowedEndpoint = (url.protocol === 'wss:' && url.hostname === 'codex-cloud-environments.chatgpt.com') ||
+    (url.protocol === 'https:' && url.hostname === 'api.openai.com');
+  if (!allowedEndpoint || url.username || url.password || url.port || url.hash) throw new Error('Unexpected executor connection host.');
   // Pass the API-returned URL unchanged, as an argv value, never as shell source.
   return ['run', '-d', '--name', spec.name, '--label', 'agents.course.lab=32',
     '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
     '--pids-limit', '128', '--memory', '512m', '--cpus', '1',
     '--tmpfs', '/tmp:rw,nosuid,nodev,size=128m,uid=1000,gid=1000',
+    '--tmpfs', '/home/node:rw,nosuid,nodev,size=32m,uid=1000,gid=1000',
     '--tmpfs', '/workspace:rw,nosuid,nodev,size=16m,uid=1000,gid=1000',
-    '-e', 'CODEX_API_KEY', '-e', 'LAB32_NONCE', '-e', 'HOME=/tmp/codex-home',
+    '-e', 'CODEX_API_KEY', '-e', 'LAB32_NONCE', '-e', 'HOME=/home/node',
     executorImage, '--remote', spec.remoteUrl, '--environment-id', spec.environmentId];
 }
 function docker(args: string[], extra: Record<string, string> = {}): Promise<string> {

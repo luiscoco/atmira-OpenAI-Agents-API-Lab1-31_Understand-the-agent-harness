@@ -73,7 +73,11 @@ export async function executeListing(job: ExecutorJob, api: ExecutorApi, provide
         trace.inputSent = true;
       }
       const item = object(event.item);
-      if (event.type === 'agent.session.turn.item.added' && item.type === 'message' && item.phase === 'commentary') commentary.add(item.id);
+      if (['agent.session.turn.item.added', 'agent.session.turn.item.done'].includes(String(event.type)) && item.type === 'message' && item.phase === 'commentary') {
+        commentary.add(item.id);
+        for (const key of parts.keys()) if (key.startsWith(`${item.id}:`)) parts.delete(key);
+        trace.answer = [...parts.values()].join('\n');
+      }
       if ((event.type === 'agent.session.turn.output_text.delta' || event.type === 'agent.session.turn.output_text.done') && !commentary.has(event.item_id) && event.subagent_id == null) {
         const key = `${event.item_id}:${event.content_index}`;
         parts.set(key, event.type.endsWith('.done') ? String(event.text ?? '') : (parts.get(key) ?? '') + String(event.delta ?? ''));
@@ -111,6 +115,9 @@ export async function executeListing(job: ExecutorJob, api: ExecutorApi, provide
 }
 export async function retryExecutorCleanup(job: ExecutorJob, api: ExecutorApi, provider: ExecutorProvider) {
   if (job.status !== 'finished') throw new Error('Wait for the run to settle before retrying cleanup.');
-  if (job.trace.cleanup === 'failed') { await provider.remove(job.containerName); job.trace.cleanup = 'removed'; }
-  if (job.sessionCleanup === 'failed' && job.trace.sessionId) { await api.delete(job.trace.sessionId); job.sessionCleanup = 'deleted'; }
+  const results = await Promise.allSettled([
+    (async () => { if (job.trace.cleanup === 'failed') { await provider.remove(job.containerName); job.trace.cleanup = 'removed'; } })(),
+    (async () => { if (job.sessionCleanup === 'failed' && job.trace.sessionId) { await api.delete(job.trace.sessionId); job.sessionCleanup = 'deleted'; } })(),
+  ]);
+  if (results.some(result => result.status === 'rejected')) throw new Error('Cleanup is still unconfirmed.');
 }
