@@ -1,10 +1,10 @@
-# OpenAI Agents API: Labs 01–31
+# OpenAI Agents API: Labs 01–32
 
-This React and Node app introduces the OpenAI Agents API through twenty-nine hands-on labs. The Node server keeps the API key private and streams agent responses to the browser.
+This React and Node app introduces the OpenAI Agents API through thirty-two hands-on labs. The Node server keeps the API key private and streams agent responses to the browser.
 
 ## How it was built — step by step
 
-This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–31 are implemented; the later course units in [CURRICULUM.md](CURRICULUM.md) remain planned.
+This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–32 are implemented; the later course units in [CURRICULUM.md](CURRICULUM.md) remain planned.
 
 ### 1. Build the React and Node shell
 
@@ -180,3 +180,7 @@ Inspect a hosted session from earlier labs, retain needed artifacts, stop incomi
 ## Lab 31 — Understand the agent harness
 
 Explore an annotated architecture diagram and six synthetic ownership traces. Compare the Agents API, Agents SDK, and Responses API; identify model proposals, application function handlers, managed orchestration, and sandbox commands. A read-only inspector projects saved sessions from earlier labs with bounded pagination and explicit limitations. Complete the ownership exercise and export an annotated evidence document or trace JSON. Six explained teaching snippets include individual Viva voice narration, Read all six, and Stop. See [LAB31.md](LAB31.md) for the step-by-step build guide and student challenge.
+
+## Lab 32 — Connect a self-hosted environment
+
+Connect the official `codex exec-server` in a disposable local Docker container. The server creates a self-hosted session, subscribes before starting compute, and sends a fixed file task once the environment connects. Verify command output, a hidden file, the exact JSON inventory, and a fresh nonce. Background jobs survive browser navigation, use bounded deadlines, and track container removal separately from API session deletion. Six synthetic practice cases, browser/server rule checks, integration tests, and six explained snippets with Viva voice work without live credentials. Live execution requires Docker and a separate restricted environment key. See [LAB32.md](LAB32.md) for setup and the student challenge.

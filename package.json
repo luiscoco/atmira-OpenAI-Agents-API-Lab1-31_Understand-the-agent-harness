@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.lab6.json",
     "build": "npm run typecheck && vite build",
     "start": "tsx server/index.ts --production",
-    "test:lab31": "node --import tsx --test server/lab31.integration.test.ts"
+    "test:lab31": "node --import tsx --test server/lab31.integration.test.ts",
+    "test:lab32": "node --import tsx --test server/lab32.integration.test.ts",
+    "lab32:image": "docker build --tag agents-lab32-executor:local sandbox/lab32"
   },
   "dependencies": {
     "openai": "latest",

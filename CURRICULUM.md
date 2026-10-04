@@ -1,12 +1,12 @@
 # OpenAI Agents API with React — 56 hands-on labs
 
-This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–31 are implemented in this repository. Labs 32–56 are planned.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
+This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–32 are implemented in this repository. Labs 33–56 are planned.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
 
 **Recording target: 125 video lessons, approximately 12 hours.** A lab is a practical learning unit; a video lesson is a recording unit. The recording plan adds short explanations alongside the labs and expands Lab 56 into an integrated application project. These counts and durations are course planning targets, not Udemy platform requirements. The complete ordered video schedule is in [COURSE_RECORDING_PLAN.md](COURSE_RECORDING_PLAN.md).
 
 ## How it was built — step by step
 
-This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB31.md`. Labs 32–56 below are plans.
+This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB32.md`. Labs 33–56 below are plans.
 
 ### 1. Establish one runnable application
 
@@ -159,7 +159,7 @@ Status refers to lessons in this repository, not product availability. All plann
 
 ## Stage 7 — Harness architecture, self-hosted environments, and security (Labs 31–38)
 
-**Implementation status:** [Lab 31](LAB31.md) is implemented with architecture practice, saved-state inspection, explained snippets, and Viva voice. Labs 32–38 remain planned.
+**Implementation status:** [Lab 31](LAB31.md) and [Lab 32](LAB32.md) are implemented with architecture practice, executor lifecycle inspection, explained snippets, and Viva voice. Labs 33–38 remain planned. Live Lab 32 evidence requires Docker and correctly scoped credentials.
 
 **Checkpoint:** students explain the execution architecture, then run a file task with project guidance, a reusable skill, and enforced access limits. References: [Agents API architecture](https://developers.openai.com/api/docs/guides/agents-api/architecture), [self-hosted sandboxes](https://developers.openai.com/api/docs/guides/agents-api/environments/self-hosted), [sandbox security](https://developers.openai.com/api/docs/guides/agents-api/environments/security), [Codex project instructions](https://learn.chatgpt.com/docs/agent-configuration/agents-md), and [Agent Skills](https://developers.openai.com/api/docs/guides/tools-skills).
 
