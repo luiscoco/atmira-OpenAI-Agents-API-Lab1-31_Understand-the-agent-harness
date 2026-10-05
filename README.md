@@ -1,10 +1,10 @@
-# OpenAI Agents API: Labs 01–34
+# OpenAI Agents API: Labs 01–50
 
 This React and Node app introduces the OpenAI Agents API through thirty-four hands-on labs. The Node server keeps the API key private and streams agent responses to the browser.
 
 ## How it was built — step by step
 
-This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–34 are implemented; the later course units in [CURRICULUM.md](CURRICULUM.md) remain planned.
+This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–50 are implemented; the later course units in [CURRICULUM.md](CURRICULUM.md) remain planned.
 
 ### 1. Build the React and Node shell
 
@@ -192,3 +192,46 @@ Explore repository instruction discovery, scoped overrides, empty files, and con
 ## Lab 34 — Create and discover standalone skills
 
 Author a focused SKILL.md and inspect its supporting reference and exact-cents helper. Register the immutable skill parent in a self-hosted sandbox through `environment.capability_directories`. Compare relevant, unrelated and unregistered runs with captured read/helper command evidence, independent totals and a fresh marker. Five labelled synthetic cases, browser/server checks and six Viva voice lessons work without credentials. Live runs use a separate disposable Docker image and the restricted environment key from Lab 32. See [LAB34.md](LAB34.md) for setup, validation and the student challenge.
+
+## Lab 35 - Limit filesystem access
+
+Test enforced filesystem boundaries with an unprivileged disposable executor, root-owned protected fixtures and a read-only root filesystem. Verify workspace reads and writes, direct/traversal/symlink denials and an explicit broader-access request using captured probe output. Five synthetic cases, shared tests, evidence export and six Viva voice lessons work without credentials. See [LAB35.md](LAB35.md) for setup and the access-policy limits.
+
+## Lab 36 - Run an environment-origin MCP server
+
+Connect an MCP HTTP server from the executor network namespace and verify a fresh private tool result. The page includes the exact transport configuration, four synthetic evidence cases, a live origin comparison, shared tests, evidence export and six narrated snippets. See [LAB36.md](LAB36.md) for setup, the implementation walkthrough and the student checkpoint.
+
+## Lab 37 - Recover an environment failure
+
+Recover observation loss or executor disconnection without blindly replaying the original task. The page includes five failure cases, a recovery decision exercise, a live one-subscription-loss injection, a bounded worker, evidence export and six narrated snippets. See [LAB37.md](LAB37.md) for setup, the implementation walkthrough and the student checkpoint.
+
+## Lab 38 - Build a guarded file assistant
+
+Combine explicit project guidance, a standalone report helper, enforced function-tool scope and human review. The exercise creates real disposable files and applies only an approved, current proposal. It includes a key-free local broker exercise, optional live agent, audit export and six narrated snippets. See [LAB38.md](LAB38.md) for setup, the implementation walkthrough and the student checkpoint.
+
+## Lab 39 - Enable subagents
+
+Enable managed harness delegation and give one child a bounded release-note extraction contract. Verify creation, turn ownership, returned fields and the root result independently. The page includes synthetic valid/claim/disabled cases, an optional live run, evidence export and six narrated snippets. See [LAB39.md](LAB39.md) for setup, the implementation walkthrough and the student checkpoint.
+
+## Lab 40 - Run independent tasks in parallel
+
+Give independent labelled sources to two children and observe whether their work overlaps. Verify each returned result and preserve an explicitly incomplete comparison if a source or child fails. The page includes valid, sequential, missing-source and failed-child cases, an optional live run and six narrated snippets. See [LAB40.md](LAB40.md) for setup, the implementation walkthrough and the student checkpoint.
+
+## Labs 41–50 — Progress, integrations and operations
+
+| Lab | Exercise | Guide |
+| --- | --- | --- |
+| 41 | Step through root and child progress with failure recovery decisions | [LAB41.md](LAB41.md) |
+| 42 | Writer-owned draft, reviewer findings and revised acceptance checks | [LAB42.md](LAB42.md) |
+| 43 | Compare matched single/multi evidence, quality, duration and nullable usage | [LAB43.md](LAB43.md) |
+| 44 | Signed webhook receiver, durable replay ledger and failure fixtures | [LAB44.md](LAB44.md) |
+| 45 | Runnable validation command plus project/plugin Codex hook scaffolds | [LAB45.md](LAB45.md) |
+| 46 | Optional page-scoped WebMCP report tools and labelled local fallback | [LAB46.md](LAB46.md) |
+| 47 | Success/failure trace walkthrough and OTLP export import | [LAB47.md](LAB47.md) |
+| 48 | Nullable root/child token accounting with snapshot replacement | [LAB48.md](LAB48.md) |
+| 49 | Bounded retries and server-enforced per-identity request budgets | [LAB49.md](LAB49.md) |
+| 50 | Local cookie authentication, opaque session mapping and ownership rejection | [LAB50.md](LAB50.md) |
+
+These labs include runnable local exercises, browser/server checks, evidence exports and six narrated snippets each. Labs 41–43 use replay, manual roles or imported measurements. Native Codex hook dispatch, WebMCP browser invocation and real webhook delivery require their documented runtime setup; local fixtures do not claim those observations. Lab 50's identity selector is a localhost teaching fixture, not production credential authentication.
+
+Run `npm run test:operations` for all new integration tests. Set `OPENAI_WEBHOOK_SECRET` only for actual Lab 44 provider deliveries; the server verifies raw signatures before recording notifications. Ledger files under `.lab-data/` are ignored by Git.

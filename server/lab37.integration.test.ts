@@ -1,0 +1,28 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { runAdvancedSuite } from '../src/advancedLabTests.ts';
+import { verifyRecovery } from '../src/lab37Recovery.ts';
+import { createRecoveryJob, executeRecovery, type RecoveryApi } from './lab37Service.ts';
+import { handleLab37 } from './lab37.ts';
+import type { ExecutorProvider } from './lab32Docker.ts';
+test('shared Lab 37 suite passes', () => { for (const row of runAdvancedSuite(37)) assert.ok(row.passed, row.name); });
+function fixture(mode: 'stream' | 'disconnect' | 'wrong' | 'exhausted') {
+  const job = createRecoveryJob('test', mode === 'stream' ? 'stream' : 'none'); let streams = 0; let inspections = 0; let inputs = 0; let starts = 0; let removals = 0; let deletes = 0; let cancels = 0;
+  const api: RecoveryApi = {
+    create: async () => ({ id: 'sess_recovery', environment: { type: 'self_hosted', id: 'env_recovery', remote_url: 'https://api.openai.com/v1/agents/api' } }),
+    stream: async () => { const n = ++streams; return { async *[Symbol.asyncIterator]() { yield { type: 'agent.session.environment.connected' }; if (mode === 'exhausted') return; if (n === 1 && mode !== 'stream') { yield { type: 'agent.session.environment.disconnected' }; return; } yield { type: 'agent.session.turn.completed', turn: { id: 'root', subagent_id: null } }; } }; },
+    input: async () => { inputs++; },
+    inspect: async () => { inspections++; const completed = mode === 'stream' || inspections > 1 && mode === 'disconnect'; return { session: { id: 'sess_recovery', environment: { id: mode === 'wrong' ? 'env_other' : 'env_recovery' } }, environment: { id: 'env_recovery', status: mode === 'stream' || mode === 'exhausted' ? 'connected' : 'disconnected' }, turns: [{ id: 'root', subagent_id: null, status: completed ? 'completed' : 'in_progress' }], items: completed ? [{ id: 'answer', type: 'message', role: 'assistant', phase: 'final_answer', content: [{ text: 'Recovered result' }] }] : [] }; },
+    cancel: async () => { cancels++; }, delete: async () => { deletes++; },
+  };
+  const provider: ExecutorProvider = { preflight: async () => {}, start: async () => { starts++; }, remove: async () => { removals++; } };
+  return { job, api, provider, counts: () => ({ streams, inspections, inputs, starts, removals, deletes, cancels }) };
+}
+test('lost observation recovers saved completion without resubmitting input or replacing compute', async () => { const f = fixture('stream'); await executeRecovery(f.job, f.api, f.provider, new AbortController()); assert.equal(f.counts().inputs, 1); assert.equal(f.counts().starts, 1); assert.equal(f.job.recovery.answer, 'Recovered result'); assert.equal(f.job.recovery.outcome, 'completed'); assert.ok(verifyRecovery(f.job.recovery).every(row => row.passed)); });
+test('disconnected executor is replaced once with original mapping and one input', async () => { const f = fixture('disconnect'); await executeRecovery(f.job, f.api, f.provider, new AbortController()); assert.equal(f.counts().inputs, 1); assert.equal(f.counts().starts, 2); assert.equal(f.job.recovery.reconnects, 1); assert.equal(f.job.recovery.outcome, 'completed'); assert.ok(verifyRecovery(f.job.recovery).every(row => row.passed)); });
+test('mismatched saved mapping cannot reconnect compute', async () => { const f = fixture('wrong'); await executeRecovery(f.job, f.api, f.provider, new AbortController()); assert.equal(f.counts().starts, 1); assert.equal(f.job.recovery.outcome, 'unknown'); assert.match(f.job.recovery.error!, /mapping mismatch/); assert.equal(f.counts().deletes, 1); });
+test('second stream loss exhausts recovery without manufactured cancellation', async () => { const f = fixture('exhausted'); await executeRecovery(f.job, f.api, f.provider, new AbortController()); assert.equal(f.counts().streams, 2); assert.equal(f.counts().inputs, 1); assert.equal(f.counts().cancels, 1); assert.equal(f.job.recovery.outcome, 'unknown'); assert.equal(f.job.recovery.cleanup, 'confirmed'); });
+test('both cleanup attempts execute even when provider removal fails', async () => { const f = fixture('stream'); f.provider.remove = async () => { throw new Error('blocked'); }; await executeRecovery(f.job, f.api, f.provider, new AbortController()); assert.equal(f.counts().deletes, 1); assert.equal(f.job.recovery.cleanup, 'failed'); assert.equal(f.job.sessionCleanup, 'deleted'); });
+test('deadline interrupts an unresponsive event iterator and releases both resources', async () => { const f = fixture('stream'); f.job.fault = 'none'; f.api.stream = async () => ({ [Symbol.asyncIterator]() { return { next: () => new Promise<IteratorResult<any>>(() => {}) }; } }); await executeRecovery(f.job, f.api, f.provider, new AbortController(), 15); assert.equal(f.job.status, 'finished'); assert.equal(f.counts().deletes, 1); assert.equal(f.job.trace.cleanup, 'removed'); });
+test('Lab 37 routes reject arbitrary session IDs and fault types', async () => { const server = createServer((request, response) => { void handleLab37(request, response, new URL(request.url!, 'http://localhost').pathname); }); await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve)); const base = `http://127.0.0.1:${(server.address() as any).port}`; try { assert.equal((await fetch(`${base}/api/lab37/run`, { method: 'POST', body: JSON.stringify({ requestId: 'a'.repeat(20), fault: 'stream', sessionId: 'sess_external' }) })).status, 400); assert.equal((await fetch(`${base}/api/lab37/status`, { headers: { Origin: 'https://external.test' } })).status, 403); } finally { await new Promise<void>(resolve => server.close(() => resolve())); } });

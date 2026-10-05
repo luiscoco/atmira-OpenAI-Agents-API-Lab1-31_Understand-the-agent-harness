@@ -1,12 +1,12 @@
 # OpenAI Agents API with React — 56 hands-on labs
 
-This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–34 are implemented in this repository. Labs 35–56 are planned.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
+This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–50 are implemented in this repository. Labs 51–56 are planned.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
 
 **Recording target: 125 video lessons, approximately 12 hours.** A lab is a practical learning unit; a video lesson is a recording unit. The recording plan adds short explanations alongside the labs and expands Lab 56 into an integrated application project. These counts and durations are course planning targets, not Udemy platform requirements. The complete ordered video schedule is in [COURSE_RECORDING_PLAN.md](COURSE_RECORDING_PLAN.md).
 
 ## How it was built — step by step
 
-This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB34.md`. Labs 35–56 below are plans.
+This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB50.md`. Labs 51–56 below are plans.
 
 ### 1. Establish one runnable application
 
@@ -73,13 +73,13 @@ Status refers to lessons in this repository, not product availability. All plann
 
 | Capability | Lessons | Runtime or product | Status |
 | --- | --- | --- | --- |
-| Rules / `AGENTS.md` | 33; applied again in 38 | Codex project discovery exercise and explicit application-loaded API guidance | 33 implemented; 38 planned |
-| Subagents | 39–43 | Agents API multi-agent orchestration | Planned |
-| MCP | 22–24; 36 | Agents API service-origin and environment-origin MCP | 22–24 implemented; 36 planned |
-| WebMCP | 46 | Website tools in a compatible ChatGPT Work / Codex browser; optional adjacent integration | Planned |
+| Rules / `AGENTS.md` | 33; applied again in 38 | Codex project discovery exercise and explicit application-loaded API guidance | 33 and 38 implemented |
+| Subagents | 39–43 | Agents API multi-agent orchestration | Live 39–40; replay/manual/imported exercises 41–43 |
+| MCP | 22–24; 36 | Agents API service-origin and environment-origin MCP | 22–24 and 36 implemented |
+| WebMCP | 46 | Website tools in a compatible ChatGPT Work / Codex browser; optional adjacent integration | Registration and local fallback implemented; native invocation requires compatible browser |
 | Skills | 25; 34; applied again in 38 | Agents API sandbox skills and capability directories | Plugin-bundled skill implemented in 25; standalone skill implemented in 34 |
-| Hooks | 45; compared with webhooks in 44 | Codex lifecycle hooks; application callbacks explained separately | Planned |
-| Plugins | 25; reinforced in 34 and 45 | Agents API environment plugins; Codex hook packaging is runtime-specific | Skill + MCP packaging implemented; extensions planned |
+| Hooks | 45; compared with webhooks in 44 | Codex lifecycle hooks; application callbacks explained separately | Script and project/plugin scaffolds implemented; native dispatch requires runtime verification |
+| Plugins | 25; reinforced in 34 and 45 | Agents API environment plugins; Codex hook packaging is runtime-specific | Skill + MCP packaging and Lab 45 hook scaffolds implemented; native hook verification requires runtime setup |
 | Harnesses | 31; 52–53 | Managed Agents API execution harness; separate course-owned evaluation harness | 31 implemented; evaluation harnesses planned |
 | SDD — Specification-Driven Design | 51–53; 56 | Course development workflow, independent of API choice | Planned |
 
@@ -159,7 +159,7 @@ Status refers to lessons in this repository, not product availability. All plann
 
 ## Stage 7 — Harness architecture, self-hosted environments, and security (Labs 31–38)
 
-**Implementation status:** [Lab 31](LAB31.md) and [Lab 32](LAB32.md) are implemented with architecture practice, executor lifecycle inspection, explained snippets, and Viva voice. Lab 33 is implemented with project-rule discovery, an explicit API instruction-loading comparison, and a native Codex workspace exercise. Lab 34 is implemented with standalone skill authoring, capability registration and self-hosted read/helper evidence. Labs 35–38 remain planned. Live Lab 32 evidence requires Docker and correctly scoped credentials.
+**Implementation status:** [Lab 31](LAB31.md) and [Lab 32](LAB32.md) are implemented with architecture practice, executor lifecycle inspection, explained snippets, and Viva voice. Lab 33 is implemented with project-rule discovery, an explicit API instruction-loading comparison, and a native Codex workspace exercise. Lab 34 is implemented with standalone skill authoring, capability registration and self-hosted read/helper evidence. Lab 35 is implemented with enforced filesystem permissions, eight fixed access probes and captured command evidence. Labs 36–38 are implemented with private environment-origin MCP, bounded saved-state recovery, and a guarded file broker with reviewed diffs and approval. Live Lab 32 evidence requires Docker and correctly scoped credentials.
 
 **Checkpoint:** students explain the execution architecture, then run a file task with project guidance, a reusable skill, and enforced access limits. References: [Agents API architecture](https://developers.openai.com/api/docs/guides/agents-api/architecture), [self-hosted sandboxes](https://developers.openai.com/api/docs/guides/agents-api/environments/self-hosted), [sandbox security](https://developers.openai.com/api/docs/guides/agents-api/environments/security), [Codex project instructions](https://learn.chatgpt.com/docs/agent-configuration/agents-md), and [Agent Skills](https://developers.openai.com/api/docs/guides/tools-skills).
 
@@ -169,26 +169,30 @@ Status refers to lessons in this repository, not product availability. All plann
 | **32. Connect a self-hosted environment** | Supply an executor and observe the environment connection lifecycle. | A file-listing task in a disposable local sandbox. |
 | **33. Apply project rules with AGENTS.md** *(implemented)* | Write repository guidance, compare directory scope and precedence in Codex, and verify how the selected runtime loads instructions; distinguish guidance from enforced permissions. | A file task follows repository conventions, with recorded instruction sources and a scoped override comparison. |
 | **34. Create and discover standalone skills** *(implemented)* | Author `SKILL.md`, add references and scripts, register `environment.capability_directories` in a self-hosted Agents API sandbox, and compare standalone skills with plugin-bundled skills from Lab 25. | A reusable report skill is discovered and read for a relevant task; an unrelated task checks unnecessary activation, with tool or file-read evidence. |
-| **35. Limit filesystem access** | Give the agent only the files and paths needed for its task; enforce access outside prompt instructions. | An access test that succeeds in the workspace and fails outside it, even when the prompt requests broader access. |
-| **36. Run an environment-origin MCP server** | Connect a private or local MCP server from the environment. | A tool call that cannot be made from the public network. |
-| **37. Recover an environment failure** | Handle connection loss, setup errors, and resumable session state. | A clear retry or recovery path in the UI. |
-| **38. Build a guarded file assistant** | Reuse verified project guidance and skills while combining enforced filesystem scope, tool limits, and user review. | A proposed file change with a visible diff and approval step; an access-denied case proves enforcement is independent of instructions. |
+| **35. Limit filesystem access** *(implemented)* | Provide a task workspace and enforce protected paths with unprivileged ownership permissions and a read-only root filesystem. | Eight fixed probes verify workspace access, protected direct/traversal/symlink denials, denied writes and a readable runtime path, including an explicit broader-access request. |
+| **36. Run an environment-origin MCP server** *(implemented)* | Connect a private or local MCP server from the environment. | A tool call that cannot be made from the public network. |
+| **37. Recover an environment failure** *(implemented)* | Handle connection loss, setup errors, and resumable session state. | A clear retry or recovery path in the UI. |
+| **38. Build a guarded file assistant** *(implemented)* | Reuse verified project guidance and skills while combining enforced filesystem scope, tool limits, and user review. | A proposed file change with a visible diff and approval step; an access-denied case proves enforcement is independent of instructions. |
 
 For Lab 33, the documented Codex instruction-discovery exercise is the baseline. An Agents API variant must show the actual loading path and evidence; do not assume Codex directory precedence is automatically provided by the API.
 
 ## Stage 8 — Multi-agent work (Labs 39–43)
 
+**Implementation status:** Labs 39–43 are implemented with bounded delegation contracts, root/child attribution, child report verification, observed overlap and explicit incomplete-result cases. Labs 41–43 now provide progress replay, a manual writer/reviewer workflow and matched evidence comparison. Live model evidence requires configured credentials.
+
 **Checkpoint:** a lead agent delegates two independent tasks and combines their results. Reference: [multi-agent](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
 
 | Lab | What students learn | What they build or verify |
 | --- | --- | --- |
-| **39. Enable subagents** | Turn on multi-agent orchestration, identify root versus subagent work, and define a delegation contract: task, permitted tools, expected output, and completion criteria. | A root agent delegates a bounded research task and checks its returned output against the contract. |
-| **40. Run independent tasks in parallel** | Delegate separate questions, bound concurrency, wait for both results, and decide how to handle one failed child. | A two-source comparison plus a failed-child case with a bounded retry or an explicitly incomplete result. |
+| **39. Enable subagents** *(implemented)* | Turn on multi-agent orchestration, identify root versus subagent work, and define a delegation contract: task, permitted tools, expected output, and completion criteria. | A root agent delegates a bounded research task and checks its returned output against the contract. |
+| **40. Run independent tasks in parallel** *(implemented)* | Delegate separate questions, bound concurrency, wait for both results, and decide how to handle one failed child. | A two-source comparison plus a failed-child case with a bounded retry or an explicitly incomplete result. |
 | **41. Display subagent progress** | Interpret subagent events without ending the UI on a child's completion or failure; distinguish child outcomes from the root outcome. | A progress panel showing each child's status and the root's recovery decision. |
 | **42. Coordinate reviewer and writer** | Assign distinct outputs, define review acceptance criteria, avoid shared-file conflicts, and return revisions to the writer. | A draft, a review report, and a revised draft with resolved findings. |
 | **43. Compare single and multi-agent runs** | Measure quality, duration, and token usage on the same task, including coordination cost and failure recovery. | A short evidence-based recommendation on when delegation helps. |
 
 ## Stage 9 — Observability, integrations, and operations (Labs 44–50)
+
+**Implementation status:** Labs 44–50 are implemented with local exercises, shared checks, narrated snippets and guides. Live webhook delivery, native Codex hook dispatch and WebMCP calls require the documented setup. Authentication uses explicitly labelled local demo identities.
 
 **Checkpoint:** a deployed-like app can explain a failed run and account for its use; separate integration exercises demonstrate lifecycle automation and optional website tools. References: [observability and usage](https://developers.openai.com/api/docs/guides/agents-api/observability), [tracing](https://developers.openai.com/api/docs/guides/agents-api/tracing), [session webhooks](https://developers.openai.com/api/docs/guides/agents-api/sessions/webhooks), [Codex hooks](https://learn.chatgpt.com/docs/hooks), and [WebMCP site tools](https://learn.chatgpt.com/docs/webmcp).
 

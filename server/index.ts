@@ -34,6 +34,12 @@ import { handleLab31 } from './lab31.ts';
 import { handleLab32, stopLab32 } from './lab32.ts';
 import { handleLab33 } from './lab33.ts';
 import { handleLab34, stopLab34 } from './lab34.ts';
+import { handleLab35, stopLab35 } from './lab35.ts';
+import { handleLab36, stopLab36 } from './lab36.ts';
+import { handleLab37, stopLab37 } from './lab37.ts';
+import { handleLab38, stopLab38 } from './lab38.ts';
+import { handleDelegationLab, stopDelegationLabs } from './labs39to40.ts';
+import { handleOperationsLab } from './labs41to50.ts';
 
 const root = resolve(import.meta.dirname, '..');
 const dist = join(root, 'build');
@@ -630,6 +636,17 @@ server.on('request', async (request, response) => {
     await handleLab33(request, response, path);
     return;
   }
+  if (path.startsWith('/api/lab36/')) { await handleLab36(request, response, path); return; }
+  if (path.startsWith('/api/lab37/')) { await handleLab37(request, response, path); return; }
+  if (path.startsWith('/api/lab38/')) { await handleLab38(request, response, path); return; }
+  if (path.startsWith('/api/lab39/')) { await handleDelegationLab(request, response, path, 39); return; }
+  if (path.startsWith('/api/lab40/')) { await handleDelegationLab(request, response, path, 40); return; }
+  const operationsRoute = /^\/api\/lab(4[1-9]|50)\//.exec(path);
+  if (operationsRoute) { await handleOperationsLab(request, response, path, Number(operationsRoute[1])); return; }
+  if (path.startsWith('/api/lab35/')) {
+    await handleLab35(request, response, path);
+    return;
+  }
   if (path.startsWith('/api/lab34/')) {
     await handleLab34(request, response, path);
     return;
@@ -661,5 +678,5 @@ server.listen(port, () => console.log(`Agent Labs running at http://localhost:${
 startPrivateMcp();
 for (const signal of ['SIGINT', 'SIGTERM'] as const) process.once(signal, () => {
   const deadline = setTimeout(() => process.exit(1), 45_000);
-  void Promise.allSettled([stopLab32(), stopLab34()]).finally(() => { clearTimeout(deadline); process.exit(0); });
+  void Promise.allSettled([stopLab32(), stopLab34(), stopLab35(), stopLab36(), stopLab37(), stopLab38(), stopDelegationLabs()]).finally(() => { clearTimeout(deadline); process.exit(0); });
 });

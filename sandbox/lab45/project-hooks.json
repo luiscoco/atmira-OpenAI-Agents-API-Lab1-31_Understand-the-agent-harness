@@ -1,0 +1,6 @@
+{
+  "description": "Lab 45 project command hook; install in an isolated exercise at .codex/hooks.json and review with /hooks.",
+  "hooks": {
+    "PostToolUse": [{ "matcher": "^(apply_patch|Edit|Write)$", "hooks": [{ "type": "command", "command": "node sandbox/lab45/validate-report.mjs", "timeout": 10, "statusMessage": "Validate course report" }] }]
+  }
+}

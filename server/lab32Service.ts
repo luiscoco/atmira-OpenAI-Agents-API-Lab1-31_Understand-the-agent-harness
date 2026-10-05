@@ -13,7 +13,7 @@ export type ExecutorJob = {
   id: string; status: 'running' | 'finished'; trace: ExecutorTrace;
   containerName: string; sessionCleanup: 'not created' | 'not started' | 'deleted' | 'failed';
 };
-export function createExecutorJob(id: string, lab: 32 | 34 = 32): ExecutorJob {
+export function createExecutorJob(id: string, lab: 32 | 34 | 35 | 36 | 37 = 32): ExecutorJob {
   return { id, status: 'running', trace: newExecutorTrace(randomBytes(8).toString('hex')),
     containerName: `agents-lab${lab}-${randomBytes(16).toString('hex')}`, sessionCleanup: 'not created' };
 }
@@ -32,7 +32,7 @@ export function publicExecutorJob(job: ExecutorJob, secrets: string[]): Executor
   for (const secret of secrets.filter(Boolean)) json = json.split(JSON.stringify(secret).slice(1, -1)).join('[redacted]');
   return JSON.parse(json);
 }
-export async function executeListing(job: ExecutorJob, api: ExecutorApi, provider: ExecutorProvider, controller: AbortController, limits = { runMs: 300_000, connectMs: 120_000 }, promptFor = listingPrompt) {
+export async function executeListing(job: ExecutorJob, api: ExecutorApi, provider: ExecutorProvider, controller: AbortController, limits = { runMs: 300_000, connectMs: 120_000 }, promptFor = listingPrompt, observe?: (event: Record<string, any>) => void) {
   const trace = job.trace; const started = Date.now(); const signal = controller.signal;
   let stream: (AsyncIterable<unknown> & { controller?: AbortController }) | undefined;
   let computeAttempted = false; let sent = false;
@@ -66,6 +66,7 @@ export async function executeListing(job: ExecutorJob, api: ExecutorApi, provide
         seen.add(event.event_id);
       }
       applyExecutorEvent(trace, event, ms());
+      observe?.(event);
       if (event.type === 'agent.session.environment.connected' && !sent) {
         sent = true; clearTimeout(connectionTimer);
         trace.inputMs = ms();

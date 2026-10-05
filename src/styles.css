@@ -1882,6 +1882,8 @@ td.lab23-cell.target { outline: 2px solid #4338ca; outline-offset: -4px; border-
 .lab34-page .lab34-checkbox input { width: auto; margin-right: 8px; }
 .lab34-page table { width: 100%; border-collapse: collapse; margin: 16px 0; }
 .lab34-page th, .lab34-page td { text-align: left; vertical-align: top; padding: 12px; border: 1px solid #d8deea; overflow-wrap: anywhere; }
+.lab35-page table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 16px 0; }
+.lab35-page th, .lab35-page td { text-align: left; vertical-align: top; padding: 12px; border: 1px solid #d8deea; overflow-wrap: anywhere; }
 .lab33-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .lab33-grid > * { min-width: 0; }
 .lab33-toggles { display: flex; flex-wrap: wrap; gap: 16px; margin: 12px 0; }
@@ -1904,3 +1906,7 @@ td.lab23-cell.target { outline: 2px solid #4338ca; outline-offset: -4px; border-
 .lab32-flow, .lab32-checks { display: grid; gap: 10px; padding-left: 24px; line-height: 1.6; }
 .lab32-events time { display: inline-block; min-width: 80px; font-variant-numeric: tabular-nums; }
 @media (max-width: 700px) { .lab32-boundaries { grid-template-columns: 1fr; } .lab32-state { grid-template-columns: 1fr; } }
+
+.advanced-lab-page table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 16px 0; }
+.advanced-lab-page th, .advanced-lab-page td { text-align: left; vertical-align: top; padding: 12px; border: 1px solid #d8deea; overflow-wrap: anywhere; }
+.advanced-lab-page .advanced-checkbox input { width: auto; margin-right: 8px; }

@@ -7,8 +7,8 @@ export type ExecutorProvider = {
   start(spec: ExecutorSpec): Promise<void>;
   remove(name: string): Promise<void>;
 };
-export function validContainerName(name: string, lab: 32 | 34 = 32) { return new RegExp(`^agents-lab${lab}-[a-f0-9]{32}$`).test(name); }
-export function executorArgs(spec: ExecutorSpec, lab: 32 | 34 = 32, image = executorImage) {
+export function validContainerName(name: string, lab: 32 | 34 | 35 | 36 | 37 = 32) { return new RegExp(`^agents-lab${lab}-[a-f0-9]{32}$`).test(name); }
+export function executorArgs(spec: ExecutorSpec, lab: 32 | 34 | 35 | 36 | 37 = 32, image = executorImage) {
   if (!validContainerName(spec.name, lab) || !/^[a-f0-9]{16}$/.test(spec.nonce) || !/^[a-zA-Z0-9_-]{1,200}$/.test(spec.environmentId)) throw new Error('Invalid executor spec.');
   const url = new URL(spec.remoteUrl);
   const allowedEndpoint = (url.protocol === 'wss:' && url.hostname === 'codex-cloud-environments.chatgpt.com') ||
@@ -47,7 +47,7 @@ function docker(args: string[], extra: Record<string, string> = {}): Promise<str
     });
   });
 }
-export function dockerExecutor(executorKey: string, lab: 32 | 34 = 32, image = executorImage): ExecutorProvider {
+export function dockerExecutor(executorKey: string, lab: 32 | 34 | 35 | 36 | 37 = 32, image = executorImage): ExecutorProvider {
   return {
     preflight: async () => { await docker(['image', 'inspect', image, '--format', '{{.Id}}']); },
     start: async spec => { await docker(executorArgs(spec, lab, image), { CODEX_API_KEY: executorKey, LAB32_NONCE: spec.nonce }); },

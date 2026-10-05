@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "PostToolUse": [{ "matcher": "^(apply_patch|Edit|Write)$", "hooks": [{ "type": "command", "command": "node \"${PLUGIN_ROOT}/validate-report.mjs\"", "timeout": 10, "statusMessage": "Validate course report" }] }]
+  }
+}

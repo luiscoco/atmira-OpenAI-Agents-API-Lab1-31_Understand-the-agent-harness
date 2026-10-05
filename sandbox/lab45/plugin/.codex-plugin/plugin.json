@@ -1,0 +1,1 @@
+{ "name": "lab45-report-validation", "version": "1.0.0", "description": "Teaching fixture: validate the course report after a file edit.", "hooks": "./hooks/hooks.json" }
