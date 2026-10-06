@@ -4,7 +4,7 @@ All 56 labs have implemented exercises and guides. Lab 25's unavailable-MCP comp
 
 | Check | Observed result |
 | --- | --- |
-| Operations, capstone, integration and native-verification regression suites | 62 passed, zero failed |
+| Operations, capstone, integration and native-verification regression suites | 64 passed, zero failed |
 | TypeScript checks, including Lab 06 | Passed |
 | Production build and Docker image build | Passed on October 6; updated verification container healthy |
 | Deterministic evaluation dataset | 24/24 policy cases passed; uncovered criteria remain unknown |
@@ -13,7 +13,7 @@ All 56 labs have implemented exercises and guides. Lab 25's unavailable-MCP comp
 | Live connected research | Passed: completed root, document citation, web search, MCP and exact external quote evidence |
 | Live hosted research | Passed: connected checks plus staged-source read and both native research/report skill reads |
 | Live model evaluation | 4/4 passed: release grounding, missing support, source prompt injection and conflicting sources; semantic review remains human |
-| Native Codex lifecycle dispatch | Correlation verifier implemented and tested; actual review reports missing ledger/notifications; runtime trust and dispatch trace still required |
+| Native Codex lifecycle dispatch | Correlation verifier and filtered stdio capture wrapper implemented and tested; runtime trust and actual report-edit dispatch trace still required |
 | Native WebMCP discovery/invocation | Read/filter/reread/removal checkpoint implemented; registration-lifetime isolation and partial cleanup tested; browser inventory still empty |
 | HTTPS Docker deployment configuration | Production Compose and Caddy config validated; registration disabled by default, persistent SQLite/certificate volumes and read-only app filesystem |
 | Local production-stack verification | Actual HTTP proxy smoke, read-only app filesystem, private app port and real-restart persistence passed; all disposable resources removed |
@@ -41,3 +41,5 @@ node --import tsx scripts/reconcile-live-capstone.ts .lab-data/live-verification
 See [CAPSTONE_INTEGRATIONS.md](CAPSTONE_INTEGRATIONS.md) for the implementation, narrated snippets and runtime verification instructions. Code implementation, mocked/fixture checks, native execution and external deployment remain separate evidence categories.
 
 Remaining course completion steps: native Codex hook trust/dispatch trace, native WebMCP invocation in a compatible built-in browser, external deployment after a provider/account and DNS hostname are selected, and reconciliation of the older provider resource. `npm run verify:hooks` assesses matching imported edit/hook notifications and both validation outcomes; it does not authenticate native execution. The Lab 46 checkpoint distinguishes local demo buttons from native handler calls and requires one registration lifetime plus successful removal. `npm run verify:production` verifies an isolated local HTTP stack; external TLS remains unobserved. Email verification, password reset, OIDC/SSO, multi-replica quotas and automated retention remain outside the teaching baseline; the user selected completion of existing course capabilities first.
+
+Follow-up on October 6: a further three cleanup attempts still returned HTTP 409, with no saved turns observed. A noninteractive push of commit `0103393` still failed because Git Credential Manager has no usable login. Browser surface inventory remained empty. The new `capture:hooks` command is a custom-client transport wrapper, with selective capture of report-edit/hook notifications; it initiates no model work and does not bypass project or hook trust. A real initialization handshake with the installed Codex app-server passed; no thread, turn or model request was sent and no matching hook/edit notifications were captured. The empty handshake trace was archived, leaving the native exercise trace path available. Evidence: `.lab-data/lab45-native-project/transport-handshake-check.json`. Actual dispatch remains unverified. See [LAB45.md](LAB45.md) for client setup and evidence limits.

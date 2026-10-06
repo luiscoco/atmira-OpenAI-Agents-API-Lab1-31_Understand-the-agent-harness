@@ -21,6 +21,7 @@
     "test:integrations": "node --import tsx --test server/capstoneIntegrations.integration.test.ts",
     "verify:live": "node --import tsx scripts/verify-live-capstone.ts",
     "prepare:hooks": "node --import tsx scripts/prepare-native-hooks.ts",
+    "capture:hooks": "node --import tsx scripts/capture-native-hooks.ts",
     "verify:hooks": "node --import tsx scripts/verify-native-hooks.ts",
     "eval:capstone": "node --import tsx scripts/evaluate-capstone.ts",
     "eval:live": "node --import tsx scripts/evaluate-live-capstone.ts",
