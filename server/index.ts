@@ -40,6 +40,7 @@ import { handleLab37, stopLab37 } from './lab37.ts';
 import { handleLab38, stopLab38 } from './lab38.ts';
 import { handleDelegationLab, stopDelegationLabs } from './labs39to40.ts';
 import { handleOperationsLab } from './labs41to50.ts';
+import { capstoneApplication, stopCapstone } from './capstoneRoutes.ts';
 
 const root = resolve(import.meta.dirname, '..');
 const dist = join(root, 'build');
@@ -643,6 +644,7 @@ server.on('request', async (request, response) => {
   if (path.startsWith('/api/lab40/')) { await handleDelegationLab(request, response, path, 40); return; }
   const operationsRoute = /^\/api\/lab(4[1-9]|50)\//.exec(path);
   if (operationsRoute) { await handleOperationsLab(request, response, path, Number(operationsRoute[1])); return; }
+  if (path.startsWith('/api/capstone/') || /^\/api\/lab5[1-6]\//.test(path)) { await capstoneApplication().handle(request, response, path); return; }
   if (path.startsWith('/api/lab35/')) {
     await handleLab35(request, response, path);
     return;
@@ -673,10 +675,20 @@ server.on('request', async (request, response) => {
   }
 });
 
-server.listen(port, () => console.log(`Agent Labs running at http://localhost:${port}`));
-// Lab 24's private MCP server runs on its own port, so a tunnel can expose it without exposing /api.
-startPrivateMcp();
+server.on('error', (error: NodeJS.ErrnoException) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use. Stop the existing course server with Ctrl+C, or choose another port in PowerShell: $env:PORT='5175'; npm run dev`);
+  } else {
+    console.error(`Course server could not start: ${error.message}`);
+  }
+  process.exit(1);
+});
+server.listen(port, () => {
+  console.log(`Agent Labs running at http://localhost:${port}`);
+  // Start the separate Lab 24 MCP listener only after the course port is acquired.
+  startPrivateMcp();
+});
 for (const signal of ['SIGINT', 'SIGTERM'] as const) process.once(signal, () => {
   const deadline = setTimeout(() => process.exit(1), 45_000);
-  void Promise.allSettled([stopLab32(), stopLab34(), stopLab35(), stopLab36(), stopLab37(), stopLab38(), stopDelegationLabs()]).finally(() => { clearTimeout(deadline); process.exit(0); });
+  void Promise.allSettled([stopLab32(), stopLab34(), stopLab35(), stopLab36(), stopLab37(), stopLab38(), stopDelegationLabs(), stopCapstone()]).finally(() => { clearTimeout(deadline); process.exit(0); });
 });

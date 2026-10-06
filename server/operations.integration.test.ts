@@ -18,6 +18,13 @@ for (let lab = 41; lab <= 50; lab++) {
   test(`Lab ${lab}: shared rules and six explained snippets`, () => { const checks = runOperationsSuite(lab); assert.ok(checks.length >= 2); for (const check of checks) assert.equal(check.passed, true, check.name); assert.equal(operationsLessons[lab].length, 6); });
   test(`Lab ${lab}: React page renders exercise and evidence export`, () => { const html = renderToStaticMarkup(createElement(OperationsLab, { lab: lab as keyof typeof operationTitles, active: false })); assert.ok(html.includes(operationTitles[lab])); assert.ok(html.includes('Export evidence and notes')); assert.ok(html.includes('Run server tests')); });
 }
+test('Lab 49 offers inline demo sign-in and disables retries while signed out', () => {
+  const html = renderToStaticMarkup(createElement(OperationsLab, { lab: 49, active: false }));
+  assert.ok(html.includes('Sign in as alice')); assert.ok(html.includes('Sign in as bob'));
+  assert.ok(html.includes('your API key is separate from this sign-in'));
+  assert.match(html, /<button[^>]*disabled=""[^>]*>Run local retry exercise<\/button>/);
+  assert.ok(!html.includes('Choose Alice or Bob in Lab 50'));
+});
 test('SDK verification rejects tampering and old timestamps; durable concurrent replay deduplicates', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'agents-lab44-test-')); const file = join(directory, 'events.jsonl');
   try {
@@ -72,8 +79,12 @@ test('HTTP authentication, cookie revocation, origin checks, foreign operations 
   const post = (lab: number, action: string, value = {}, cookie = '', origin = base) => fetch(`${base}/api/lab${lab}/${action}`, { method: 'POST', headers: { 'Content-Type': 'application/json', cookie, origin }, body: JSON.stringify(value) });
   try {
     assert.equal((await post(50, 'create')).status, 401);
+    const signedOut = await post(49, 'run', { scenario: 'recover', safe: true }); assert.equal(signedOut.status, 401); assert.ok((await signedOut.json() as any).error.includes('Select Alice or Bob in Lab 49'));
+    assert.equal((await post(49, 'login', { user: 'alice' }, '', 'https://foreign.example')).status, 403);
     assert.equal((await post(50, 'login', { user: 'alice' }, '', 'https://foreign.example')).status, 403);
-    const alice = await post(50, 'login', { user: 'alice' }); const aliceCookie = alice.headers.get('set-cookie')!.split(';')[0]; assert.ok(alice.headers.get('set-cookie')!.includes('HttpOnly')); assert.ok(alice.headers.get('set-cookie')!.includes('SameSite=Strict'));
+    const alice = await post(49, 'login', { user: 'alice' }); assert.equal(alice.status, 200); const aliceCookie = alice.headers.get('set-cookie')!.split(';')[0]; assert.ok(alice.headers.get('set-cookie')!.includes('HttpOnly')); assert.ok(alice.headers.get('set-cookie')!.includes('SameSite=Strict'));
+    assert.equal((await (await fetch(`${base}/api/lab50/status`, { headers: { cookie: aliceCookie } })).json() as any).identity, 'alice');
+    assert.equal((await post(49, 'login', { user: 'invalid' }, aliceCookie)).status, 400);
     const created = await (await post(50, 'create', {}, aliceCookie)).json() as any; assert.ok(created.session.id.startsWith('app_')); assert.ok(!JSON.stringify(created).includes('providerId'));
     const bob = await post(50, 'login', { user: 'bob' }); const bobCookie = bob.headers.get('set-cookie')!.split(';')[0];
     for (const action of ['read', 'stop', 'delete']) assert.equal((await post(50, action, { id: created.session.id }, bobCookie)).status, 404);
@@ -82,7 +93,7 @@ test('HTTP authentication, cookie revocation, origin checks, foreign operations 
     for (let i = 0; i < 3; i++) assert.equal((await post(49, 'run', { scenario: 'unauthorized', safe: true }, aliceCookie)).status, 200);
     assert.equal((await post(49, 'run', { scenario: 'unauthorized', safe: true }, aliceCookie)).status, 429);
     assert.equal((await post(49, 'run', { scenario: 'unauthorized', safe: true }, bobCookie)).status, 200);
-    assert.equal((await post(50, 'logout', {}, aliceCookie)).status, 200); assert.equal((await post(50, 'read', { id: created.session.id }, aliceCookie)).status, 401);
+    assert.equal((await post(49, 'logout', {}, aliceCookie)).status, 200); assert.equal((await post(50, 'read', { id: created.session.id }, aliceCookie)).status, 401); assert.equal((await post(49, 'run', { scenario: 'recover', safe: true }, aliceCookie)).status, 401);
     for (let lab = 41; lab <= 50; lab++) { const result = await post(lab, 'test'); assert.equal(result.status, 200); assert.ok((await result.json() as any).results.every(row => row.passed)); }
   } finally { await new Promise<void>(resolve => server.close(() => resolve())); }
 });

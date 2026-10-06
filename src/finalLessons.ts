@@ -1,0 +1,51 @@
+const definitions: Record<number, Array<[string, string, string, string]>> = {
+  51: [
+    ['Version the specification', 'src/capstoneRules.ts', "version: '1.1.0'", 'Stable versions let requirements, datasets and evidence refer to the same reviewed scope.'],
+    ['Stable acceptance IDs', 'src/capstoneRules.ts', 'criteria: AC-01 through AC-12', 'The specification names persistent investigations, ownership, source validation, approvals and deployment evidence.'],
+    ['Review before building', 'src/FinalLab.tsx', 'setReviewed(json)', 'Review is an explicit student action after schema validation, not an automatic claim that the feature is correct.'],
+    ['Invalidate stale review', 'src/FinalLab.tsx', 'reviewed === json', 'Changed requirements need another review even when their previous version was approved.'],
+    ['Implement a linked feature', 'server/capstoneStore.ts', "if (decision === 'approved') INSERT INTO saved_findings", 'The capstone implements a consequential write behind owner authorization and an explicit approval decision.'],
+    ['Report remaining gaps', 'src/capstoneRules.ts', "outcome: 'unknown'", 'A stable test link is a place to verify. Deployment and live model results remain unknown until observed.'],
+  ],
+  52: [
+    ['Dataset version', 'capstone/evaluation-dataset.json', "specificationVersion: '1.1.0'", 'Cases identify the specification they are intended to measure.'],
+    ['Representative examples', 'src/capstoneRules.ts', 'cases: [E01, ..., E24]', 'Twenty-four cases cover valid sources, malformed CSV, citations and unauthorized tool calls.'],
+    ['Link expected behavior', 'src/capstoneRules.ts', "criteria: ['AC-03'], expected: 'reject'", 'Expectations use stable criterion IDs so failures can be traced back to a requirement.'],
+    ['Separate adversarial split', 'src/capstoneRules.ts', "split: 'red-team'", 'Adversarial requests can be inspected separately without silently removing them from regression totals.'],
+    ['Validate unique cases', 'src/capstoneRules.ts', 'new Set(value.cases.map(row => row.id)).size', 'Duplicate IDs cannot accidentally overwrite or inflate results.'],
+    ['Export the artifact', 'src/FinalLab.tsx', "downloadEvidence(json, 'evaluation-dataset.json')", 'Students save a concrete dataset, change its version and retain their own examples alongside prepared cases.'],
+  ],
+  53: [
+    ['Run shared policy', 'scripts/evaluate-capstone.ts', "evaluateDataset(dataset, 'enforced')", 'The Node CLI and browser evaluate the same pure validation functions used by the application.'],
+    ['Compare fixed examples', 'src/capstoneRules.ts', "evaluateDataset(dataset, 'baseline')", 'The pre-validation baseline is an explicitly simulated unsafe setting, never a server security switch.'],
+    ['Keep case results', 'src/capstoneRules.ts', 'expected, actual, outcome, detail', 'A report includes the failed request and the validator reason instead of only a score.'],
+    ['Aggregate criterion coverage', 'src/capstoneRules.ts', "!cases.length ? 'unknown' : ...", 'An uncovered criterion is unknown even when all other cases pass.'],
+    ['Retain reproducible reports', 'scripts/evaluate-capstone.ts', "--out .lab-data/evaluation-report.json", 'The saved output records dataset version, specification version, settings and case-to-criterion links.'],
+    ['Persist account evidence', 'server/capstoneRoutes.ts', "action === 'save-evaluation'", 'Signed-in users can retain the same report in the capstone database for later review.'],
+  ],
+  54: [
+    ['Constrain tool scope', 'src/capstoneRules.ts', "executeResearchTool('read_sources', {}, scopedDocuments)", 'The server chooses the owned workspace; the model cannot supply a different owner, URL or path.'],
+    ['Reject extra arguments', 'src/capstoneRules.ts', 'exactObject(args, [])', 'Instructions that request .env or foreign data cannot broaden function arguments.'],
+    ['Validate input types', 'src/capstoneRules.ts', 'validateUpload(name, content)', 'Executable names, path traversal, binary control characters and malformed CSV are rejected before storage.'],
+    ['Verify source quotes', 'src/capstoneRules.ts', 'doc.content.includes(finding.quote)', 'A missing citation excludes a finding. Exact quote presence still needs human semantic review.'],
+    ['Separate approval authority', 'server/capstoneStore.ts', "row.status !== 'pending'", 'A model cannot mark a proposal approved, and a changed repeated decision is rejected.'],
+    ['Rerun and state limits', 'src/FinalLab.tsx', "row.split === 'red-team'", 'The report demonstrates application boundaries. It does not prove that a live model resists every injected instruction.'],
+  ],
+  55: [
+    ['Deploy a bounded server', 'server/capstoneServer.ts', "path.startsWith('/api/capstone/')", 'The public deployment excludes the earlier teaching APIs and exposes only capstone and final-unit routes.'],
+    ['Keep persistent storage', 'capstone/deploy/compose.yaml', 'workspace-data:/data', 'A named volume preserves SQLite records across container restart and replacement.'],
+    ['Exclude build secrets', '.dockerignore', '.env; .env.*; .lab-data', 'Private configuration and saved investigations are excluded from the build context.'],
+    ['Health check storage', 'server/capstoneRoutes.ts', "this.store.one('SELECT 1')", 'Readiness verifies the database and reports the migration version without exposing credentials.'],
+    ['Lock the public origin', 'server/capstoneRoutes.ts', 'request.headers.origin === expected.origin', 'Mutations require the configured origin; HTTPS deployments use Secure cookies.'],
+    ['Verify a target', 'scripts/smoke-capstone.ts', 'health, ownership, approvalReplay, reportDownload', 'A smoke report names the actual target and distinguishes fixture research from unverified live model execution.'],
+  ],
+  56: [
+    ['Migrate persistent records', 'capstone/migrations/001-workspace.sql', 'users, workspaces, investigations, operations, reports, approvals', 'Application records map user-owned investigations to provider sessions and retain approvals and artifacts independently.'],
+    ['Authenticate password accounts', 'server/capstoneStore.ts', 'scryptSync(password, salt, 64)', 'Salted password hashes and hashed expiring cookie tokens are stored server-side; account identity is checked on each route.'],
+    ['Submit exactly one input', 'server/capstoneRunner.ts', 'stream = await api.stream(session, signal); await api.send(...)', 'Conversation-only sessions submit initial input at creation with a persisted request key. Follow-ups subscribe before submission. Hosted sessions wait for environment readiness. Saved-state recovery and at most two observation reconnections never send the question again.'],
+    ['Inspect unknown work', 'server/capstoneRunner.ts', "status === 'unknown'", 'A restart marks unfinished operations unknown. Recovery inspects the attributed saved turn and never blindly resubmits input.'],
+    ['Approve once transactionally', 'server/capstoneStore.ts', 'BEGIN IMMEDIATE; INSERT INTO saved_findings', 'Ownership, source hash and decision state are checked in the same transaction as the approved write.'],
+    ['Review and download reports', 'src/ResearchWorkspace.tsx', '/api/capstone/report?id=...', 'Only the owner can download a cited Markdown report. The UI labels fixture, guidance, child outcomes, unknown usage and unsupported findings.'],
+  ],
+};
+export const finalLessons = Object.fromEntries(Object.entries(definitions).map(([lab, rows]) => [lab, rows.map(([title, file, code, explanation]) => ({ title, file, code, explanation }))]));

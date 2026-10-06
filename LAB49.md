@@ -4,7 +4,7 @@ Open the course application and choose Lab 49, or reload with `#lab49`. Start th
 
 ## Exercise
 
-Sign in as Alice in Lab 50, then return to Lab 49. Run recovery, exhausted, permanent-authentication and long-Retry-After cases. Clear the safe-read checkbox to verify that unsafe writes do not retry. Exhaust three application requests; the fourth returns 429. Sign in as Bob to check an independent budget.
+Sign in as Alice directly in Lab 49 using the demo identity buttons. This sign-in tracks the local request budget and is separate from OPENAI_API_KEY. Run recovery, exhausted, permanent-authentication and long-Retry-After cases. Clear the safe-read checkbox to verify that unsafe writes do not retry. Exhaust three application requests; the fourth returns 429. Sign in as Bob on the same page to check an independent budget. Sign out to confirm the run button is disabled.
 
 ## Evidence and student checkpoint
 

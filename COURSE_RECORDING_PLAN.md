@@ -1,6 +1,6 @@
 # Udemy recording plan — 125 lessons / 12 hours
 
-This is the planned video schedule for [CURRICULUM.md](CURRICULUM.md). Lab numbers identify practical units; video numbers identify recordings. Only Labs 01–50 are currently implemented. The schedule does not claim that videos have been recorded or the project has been implemented.
+This is the planned video schedule for [CURRICULUM.md](CURRICULUM.md). Lab numbers identify practical units; video numbers identify recordings. Labs 01–56 now include implemented course exercises and a bounded document-research capstone baseline. The schedule does not claim that videos have been recorded or that optional native/external integrations have been verified.
 
 Durations are editing targets in minutes. Exercises, quizzes, coding time, API wait time, and downloadable material are outside the 720-minute video budget. Short explanations sit beside the relevant lab rather than forming a separate theory section. Simple walkthroughs use prepared code checkpoints; advanced exercises remain available in written material.
 
@@ -15,7 +15,7 @@ Durations are editing targets in minutes. Exercises, quizzes, coding time, API w
 
 ## How it was built — step by step
 
-This explains how the recording schedule was organized around the lab implementation. The tables are editing targets; they do not assert that the recordings or planned Labs 51–56 already exist. Use each implemented `LAB01.md`–`LAB50.md` guide for the actual code walkthrough.
+This explains how the recording schedule was organized around the lab implementation. The tables are editing targets; they do not assert that the recordings or optional capstone extensions already exist. Use each implemented `LAB01.md`–`LAB56.md` guide for the actual code walkthrough.
 
 ### 1. Match each recording to a practical unit
 

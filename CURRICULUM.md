@@ -1,12 +1,12 @@
 # OpenAI Agents API with React — 56 hands-on labs
 
-This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–50 are implemented in this repository. Labs 51–56 are planned.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
+This is a proposed Udemy course sequence, from a first agent run to a production-ready application. **Labs 01–56 have implemented exercises in this repository. The capstone includes uploaded-document research, persistent records, official web search/MCP, and optional hosted files with native research/report skills. Live and external deployment evidence is identified separately.** The roadmap preserves the implemented lab numbers and adds explicit coverage of harness architecture, project rules, standalone skills, lifecycle hooks, WebMCP, and Specification-Driven Design (SDD).
 
 **Recording target: 125 video lessons, approximately 12 hours.** A lab is a practical learning unit; a video lesson is a recording unit. The recording plan adds short explanations alongside the labs and expands Lab 56 into an integrated application project. These counts and durations are course planning targets, not Udemy platform requirements. The complete ordered video schedule is in [COURSE_RECORDING_PLAN.md](COURSE_RECORDING_PLAN.md).
 
 ## How it was built — step by step
 
-This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB50.md`. Labs 51–56 below are plans.
+This section explains how the course sequence maps to the implemented labs. It is a curriculum walkthrough; the implementation instructions and explained code for each completed unit live in `LAB01.md` through `LAB56.md`. The final units include a bounded, runnable capstone baseline.
 
 ### 1. Establish one runnable application
 
@@ -34,9 +34,9 @@ Teach declaration, execution, validation, service access, and approval in Labs 1
 
 Labs 26–30 add environment choice, staged inputs, package/network configuration, immutable artifacts, and cleanup. Their guides show the readiness wait, execution evidence, independent result checks, and retention decisions students must implement.
 
-### 5. Map the implemented foundation to future course stages
+### 5. Extend the implemented foundation through the capstone
 
-The planned stages build on these boundaries with harnesses, self-hosting, standalone skills, subagents, integrations, evaluation, and the integrated project. Keep their status explicit until code and validation exist. Acceptance criteria AC-01–AC-12 below describe planned project evidence, not completed features.
+Labs 31–56 build on these boundaries with harnesses, self-hosting, standalone skills, subagents, integrations, evaluation, and the integrated project. Acceptance criteria AC-01–AC-12 link implementations to tests and runtime evidence. A passing fixture or policy check does not establish native execution or external deployment.
 
 ### 6. Allocate videos and student checkpoints
 
@@ -69,7 +69,9 @@ The Agents API is evolving. Before recording a lesson, verify model access, perm
 
 ## Capability coverage
 
-Status refers to lessons in this repository, not product availability. All planned lessons require implementation and verification before recording.
+The capstone's connected and hosted profiles, Lab 25 reinforcement, and runtime verification scripts are described in [CAPSTONE_INTEGRATIONS.md](CAPSTONE_INTEGRATIONS.md). External hosting, native Codex hook dispatch, and WebMCP invocation require actual target/runtime evidence; a local fixture result does not mark these checks passed.
+
+Status refers to lessons in this repository, not product availability. Each lesson has an implemented exercise; verify the selected live runtime and recording evidence separately.
 
 | Capability | Lessons | Runtime or product | Status |
 | --- | --- | --- | --- |
@@ -80,8 +82,8 @@ Status refers to lessons in this repository, not product availability. All plann
 | Skills | 25; 34; applied again in 38 | Agents API sandbox skills and capability directories | Plugin-bundled skill implemented in 25; standalone skill implemented in 34 |
 | Hooks | 45; compared with webhooks in 44 | Codex lifecycle hooks; application callbacks explained separately | Script and project/plugin scaffolds implemented; native dispatch requires runtime verification |
 | Plugins | 25; reinforced in 34 and 45 | Agents API environment plugins; Codex hook packaging is runtime-specific | Skill + MCP packaging and Lab 45 hook scaffolds implemented; native hook verification requires runtime setup |
-| Harnesses | 31; 52–53 | Managed Agents API execution harness; separate course-owned evaluation harness | 31 implemented; evaluation harnesses planned |
-| SDD — Specification-Driven Design | 51–53; 56 | Course development workflow, independent of API choice | Planned |
+| Harnesses | 31; 52–53 | Managed Agents API execution harness; separate course-owned evaluation harness | 31 and course policy evaluation harnesses 52–53 implemented |
+| SDD — Specification-Driven Design | 51–53; 56 | Course development workflow, independent of API choice | Specification, dataset, regression and integrated workspace implemented |
 
 ## Stage 1 — First run and conversation (Labs 01–05)
 
@@ -143,7 +145,7 @@ Status refers to lessons in this repository, not product availability. All plann
 | **24. Add private MCP authentication** *(implemented)* | Attach a vault-backed credential where supported; avoid exposing secrets in React. | A private-data lookup with credential rotation notes. |
 | **25. Package a reusable plugin** *(implemented)* | Bundle a skill and MCP configuration for reuse. | A small, documented course plugin used in a new session. |
 
-**Planned reinforcement of Lab 25:** distinguish the plugin package, the skill's workflow instructions, and the MCP server's live tools. Compare a complete plugin with a variant whose MCP server is unavailable, then explain which instructions remain usable and which grounded actions cannot complete. This extension is not part of the implemented status above. Lab 34 revisits standalone skills; Lab 45 covers hook packaging in a supported Codex runtime.
+**Implemented reinforcement of Lab 25:** the availability comparison distinguishes plugin packaging, skill instructions, and MCP tools. Toggle an explicitly injected unavailable server, inspect retained skill text and failed tool evidence, and export the comparison. Use the existing disabled-network live workbench for the runtime comparison; the injected result is not live evidence. Lab 34 revisits standalone skills; Lab 45 covers hook packaging in a supported Codex runtime.
 
 ## Stage 6 — OpenAI-hosted environments and artifacts (Labs 26–30)
 
@@ -210,6 +212,8 @@ Lab 45 runs the hook exercise in a supported Codex runtime and does not assume t
 
 ## Stage 10 — Specification, evaluation, deployment, and capstone (Labs 51–56)
 
+**Implementation status:** Labs 51–56 provide a versioned specification, 24-case dataset, deterministic policy regression/red-team runners, Docker deployment and SQLite research workspace with connected web/MCP and hosted file/native skill profiles. Local deployment, persistence and ownership are verified. External hosting and live model/native integration evidence require their actual selected runtime.
+
 **Checkpoint:** students specify a domain-specific agent app, implement it, and show evidence against its acceptance criteria. References: [Agents API tracing](https://developers.openai.com/api/docs/guides/agents-api/tracing), [production best practices](https://developers.openai.com/api/docs/guides/production-best-practices), and [Agents API overview](https://developers.openai.com/api/docs/guides/agents-api/overview). Labs 52–53 use a course-owned evaluation harness: a test runner that measures behavior, distinct from the managed execution harness in Lab 31. SDD is the course's specification-to-verification workflow and requires no dedicated API endpoint.
 
 | Lab | What students learn | What they build or verify |
@@ -243,7 +247,7 @@ Use the existing React and Node teaching foundation, then provide a prepared app
 
 ### The 24 project implementation lessons
 
-These lessons expand Lab 56 and correspond to videos 102–125 in [COURSE_RECORDING_PLAN.md](COURSE_RECORDING_PLAN.md). Project lesson numbers P01–P24 identify the implementation sequence; they do not change the 56 lab numbers. All project lessons are planned.
+These lessons expand Lab 56 and correspond to videos 102–125 in [COURSE_RECORDING_PLAN.md](COURSE_RECORDING_PLAN.md). Project lesson numbers P01–P24 identify the implementation sequence; they do not change the 56 lab numbers. The integrated workspace has three profiles: uploaded sources, connected official web/MCP research, and hosted research with staged files and native research/report skills. Run scripts/verify-live-capstone.ts for actual provider evidence; baseline fixtures do not establish these integrations.
 
 | Project lesson | Course video | Title | Minutes | What students build or verify |
 | --- | --- | --- | --- | --- |

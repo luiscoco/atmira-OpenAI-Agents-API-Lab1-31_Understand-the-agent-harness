@@ -1,0 +1,12 @@
+node_modules
+.git
+.env
+.env.*
+.lab-data
+build
+dist
+*.log
+.npm-cache
+.codex
+.agents
+.aws

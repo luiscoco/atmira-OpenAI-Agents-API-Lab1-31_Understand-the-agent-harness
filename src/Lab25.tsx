@@ -16,6 +16,7 @@ import {
   type HostedEnvironment, type InstallMode, type NetworkAccess, type PluginFile, type PluginRun, type PluginVerdict, type TemplateView,
 } from './lab25Plugin.ts';
 import { samples } from './lab25Scenarios.ts';
+import PluginReinforcement from './PluginReinforcement.tsx';
 import { pluginTests, runPluginSuite, type TestGroup, type TestResult } from './lab25Tests.ts';
 
 type Health = { configured: boolean; model: string } | null;
@@ -310,6 +311,7 @@ export default function Lab25({ active, health }: { active: boolean; health: Hea
   function readAll() { if (speaking?.mode === 'all') stopSpeech(); else speak(lessons, 'all'); }
 
   return <div className="lab16-page lab21-page lab22-page lab23-page lab24-page lab25-page">
+    <PluginReinforcement files={files} />
     <div className="lab2-hero"><span className="lab2-badge lab25-badge">25/50</span><div><div className="eyebrow">LAB 25 / PACKAGE A REUSABLE PLUGIN</div><h1>Bundle a skill and an MCP server <em>once, reuse them everywhere</em>.</h1><p>A plugin is a folder: a manifest, a <b>skill</b> that says how to answer, and <code>.mcp.json</code> that says which server to use. You check it, pack it into a ZIP, and install it in an <b>OpenAI-hosted environment</b>, inline for one session or once in an <b>environment template</b>. Then you prove, from the session itself, that a brand-new session used it.</p></div></div>
 
     <section className="lab3-guide lab25-flow" aria-label="From folder to session"><h2>From folder to answer</h2><div>

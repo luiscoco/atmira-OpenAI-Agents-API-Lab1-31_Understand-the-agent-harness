@@ -17,6 +17,13 @@
     "test:lab37": "node --import tsx --test server/lab37.integration.test.ts",
     "test:lab38": "node --import tsx --test server/lab38.integration.test.ts",
     "test:lab39": "node --import tsx --test server/lab39.integration.test.ts",
+    "test:capstone": "node --import tsx --test server/capstone.integration.test.ts",
+    "test:integrations": "node --import tsx --test server/capstoneIntegrations.integration.test.ts",
+    "verify:live": "node --import tsx scripts/verify-live-capstone.ts",
+    "prepare:hooks": "node --import tsx scripts/prepare-native-hooks.ts",
+    "eval:capstone": "node --import tsx scripts/evaluate-capstone.ts",
+    "start:capstone": "node --import tsx server/capstoneServer.ts",
+    "smoke:capstone": "node --import tsx scripts/smoke-capstone.ts",
     "test:operations": "node --import tsx --test server/operations.integration.test.ts",
     "test:lab40": "node --import tsx --test server/lab40.integration.test.ts",
     "lab36:image": "docker build --tag agents-lab36-executor:local sandbox/lab36",
@@ -43,6 +50,6 @@
     "vite": "latest"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   }
 }

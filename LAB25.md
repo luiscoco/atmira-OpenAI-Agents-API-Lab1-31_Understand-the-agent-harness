@@ -2,6 +2,8 @@
 
 Bundle a skill and an MCP server into one plugin, pack it, and use it in brand-new sessions. The course plugin, `course-docs`, answers Agents API questions from the OpenAI documentation and links every page it uses.
 
+The availability comparison now shows the same package with a working or explicitly injected unavailable MCP. Its skill instructions remain available, while grounded documentation actions require successful calls. Export the comparison evidence; use disabled network in the live workbench for an actual unavailable-server comparison. See [CAPSTONE_INTEGRATIONS.md](CAPSTONE_INTEGRATIONS.md) for the integrated application workflow.
+
 ## Run the lab
 
 1. Run `npm run dev` and select **Lab 25**. The page loads the plugin folder from `plugins/course-docs`.

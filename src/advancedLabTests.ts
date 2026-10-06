@@ -3,7 +3,9 @@ import { recoveryCases, recoveryDecision, recoveryPractice, verifyRecovery } fro
 import { guardedReport, proposalChecks, simpleDiff } from './lab38Guard.ts';
 import { applyDelegationEvent, childOverlap, delegationPractice, delegationRequest, newDelegationTrace, verifyDelegation } from './lab39Delegation.ts';
 import { runOperationsSuite } from './operationsLabRules.ts';
+import { runFinalSuite } from './capstoneRules.ts';
 export function runAdvancedSuite(lab: number) {
+  if (lab >= 51 && lab <= 56) return runFinalSuite(lab);
   if (lab >= 41 && lab <= 50) return runOperationsSuite(lab);
   const checks: Array<{ name: string; run: () => boolean }> = [];
   if (lab === 36) {

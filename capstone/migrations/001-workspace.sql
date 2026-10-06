@@ -1,0 +1,14 @@
+PRAGMA foreign_keys = ON;
+CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, email TEXT UNIQUE NOT NULL, salt TEXT NOT NULL, password_hash TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS auth (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS workspaces (id TEXT PRIMARY KEY, owner TEXT NOT NULL REFERENCES users(id), name TEXT NOT NULL, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS documents (id TEXT PRIMARY KEY, workspace_id TEXT NOT NULL REFERENCES workspaces(id), name TEXT NOT NULL, content TEXT NOT NULL, hash TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS investigations (id TEXT PRIMARY KEY, workspace_id TEXT NOT NULL REFERENCES workspaces(id), question TEXT NOT NULL, session_id TEXT, mode TEXT, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS operations (id TEXT PRIMARY KEY, investigation_id TEXT NOT NULL REFERENCES investigations(id), request_id TEXT NOT NULL, status TEXT NOT NULL, question TEXT NOT NULL, evidence TEXT NOT NULL, created INTEGER NOT NULL, UNIQUE(investigation_id, request_id));
+CREATE TABLE IF NOT EXISTS reports (id TEXT PRIMARY KEY, operation_id TEXT UNIQUE NOT NULL REFERENCES operations(id), content TEXT NOT NULL, findings TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS approvals (id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES operations(id), finding TEXT NOT NULL, source_hash TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending');
+CREATE TABLE IF NOT EXISTS saved_findings (approval_id TEXT PRIMARY KEY REFERENCES approvals(id), workspace_id TEXT NOT NULL REFERENCES workspaces(id), finding TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS webhook_events (event_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, event_type TEXT NOT NULL, received INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS budgets (user_id TEXT PRIMARY KEY REFERENCES users(id), used INTEGER NOT NULL, reset INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS evaluations (id TEXT PRIMARY KEY, owner TEXT NOT NULL REFERENCES users(id), report TEXT NOT NULL, created INTEGER NOT NULL);
+PRAGMA user_version = 1;

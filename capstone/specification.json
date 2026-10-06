@@ -1,0 +1,82 @@
+{
+  "version": "1.1.0",
+  "domain": "Research and Report Workspace",
+  "constraints": [
+    "Server owns credentials, database and approved writes.",
+    "Uploaded documents are untrusted data, never execution instructions.",
+    "One active operation per investigation, bounded observation and per-user budgets.",
+    "External research is restricted to official OpenAI domains and allowlisted read-only MCP tools; executable uploads are rejected.",
+    "Sources and connected profiles use application guidance; hosted mode installs native research/report skills and records observed reads.",
+    "Unknown API or deployment evidence remains unknown."
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "requirement": "Persist workspaces and reopen investigations",
+      "evidence": "server/capstone.integration.test.ts#AC-01"
+    },
+    {
+      "id": "AC-02",
+      "requirement": "Enforce ownership on records, approvals and downloads",
+      "evidence": "server/capstone.integration.test.ts#AC-02"
+    },
+    {
+      "id": "AC-03",
+      "requirement": "Validate text, Markdown and CSV uploads",
+      "evidence": "server/capstone.integration.test.ts#AC-03"
+    },
+    {
+      "id": "AC-04",
+      "requirement": "Continue mapped sessions and inspect uncertain work",
+      "evidence": "server/capstone.integration.test.ts#AC-04"
+    },
+    {
+      "id": "AC-05",
+      "requirement": "Separate root, child, cancellation and failure outcomes",
+      "evidence": "server/capstone.integration.test.ts#AC-05"
+    },
+    {
+      "id": "AC-06",
+      "requirement": "Cite retrieved documents and expose unsupported findings",
+      "evidence": "server/capstone.integration.test.ts#AC-06"
+    },
+    {
+      "id": "AC-07",
+      "requirement": "Record guidance reads and bounded delegation evidence",
+      "evidence": "server/capstone.integration.test.ts#AC-07"
+    },
+    {
+      "id": "AC-08",
+      "requirement": "Generate and download owner-scoped reports",
+      "evidence": "server/capstone.integration.test.ts#AC-08"
+    },
+    {
+      "id": "AC-09",
+      "requirement": "Approve consequential writes once",
+      "evidence": "server/capstone.integration.test.ts#AC-09"
+    },
+    {
+      "id": "AC-10",
+      "requirement": "Deduplicate requests and notifications; bound recovery",
+      "evidence": "server/capstone.integration.test.ts#AC-10"
+    },
+    {
+      "id": "AC-11",
+      "requirement": "Retain versioned evaluations linked to criteria",
+      "evidence": "server/capstone.integration.test.ts#AC-11"
+    },
+    {
+      "id": "AC-12",
+      "requirement": "Verify deployment, retention, secrets and health",
+      "evidence": "server/capstone.integration.test.ts#AC-12"
+    }
+  ],
+  "plan": [
+    "Review stable requirements",
+    "Migrate records and authentication",
+    "Implement upload and citation rules",
+    "Map bounded research sessions",
+    "Authorize approvals and report downloads",
+    "Evaluate, deploy and review evidence"
+  ]
+}

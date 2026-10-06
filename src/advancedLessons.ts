@@ -1,6 +1,8 @@
 import { operationsLessons } from './operationsLessons.ts';
+import { finalLessons } from './finalLessons.ts';
 export const advancedLessons: Record<number, Array<{ title: string; file: string; code: string; explanation: string }>> = {
   ...operationsLessons,
+  ...finalLessons,
   "36": [
     {
       "title": "Select connection origin",

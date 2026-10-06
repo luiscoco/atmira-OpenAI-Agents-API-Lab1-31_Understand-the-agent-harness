@@ -1,10 +1,12 @@
-# OpenAI Agents API: Labs 01–50
+# OpenAI Agents API: Labs 01–56
 
-This React and Node app introduces the OpenAI Agents API through thirty-four hands-on labs. The Node server keeps the API key private and streams agent responses to the browser.
+This React and Node app introduces the OpenAI Agents API through 56 hands-on labs. The Node server keeps the API key private and streams agent responses to the browser.
+
+Lab 56 now includes connected official web/MCP research and a hosted profile with staged sources and native research/report skills. Lab 25 includes the unavailable-MCP comparison exercise. See [CAPSTONE_INTEGRATIONS.md](CAPSTONE_INTEGRATIONS.md) for the implementation and verification workflow.
 
 ## How it was built — step by step
 
-This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–50 are implemented; the later course units in [CURRICULUM.md](CURRICULUM.md) remain planned.
+This overview follows the implemented application. Open each linked lab guide for its detailed steps, important code excerpts, explanations, and student checks. Labs 01–56 now have implemented course exercises; runtime and deployment evidence boundaries are recorded in each guide.
 
 ### 1. Build the React and Node shell
 
@@ -235,3 +237,17 @@ Give independent labelled sources to two children and observe whether their work
 These labs include runnable local exercises, browser/server checks, evidence exports and six narrated snippets each. Labs 41–43 use replay, manual roles or imported measurements. Native Codex hook dispatch, WebMCP browser invocation and real webhook delivery require their documented runtime setup; local fixtures do not claim those observations. Lab 50's identity selector is a localhost teaching fixture, not production credential authentication.
 
 Run `npm run test:operations` for all new integration tests. Set `OPENAI_WEBHOOK_SECRET` only for actual Lab 44 provider deliveries; the server verifies raw signatures before recording notifications. Ledger files under `.lab-data/` are ignored by Git.
+## Labs 51–56 — Specification, evaluation, deployment and capstone
+
+| Lab | Implemented exercise | Guide |
+| --- | --- | --- |
+| 51 | Versioned reviewed specification linked to AC-01–AC-12 | [LAB51.md](LAB51.md) |
+| 52 | Versioned 24-case representative and adversarial dataset | [LAB52.md](LAB52.md) |
+| 53 | Node/browser regression comparisons with pass/fail/unknown coverage | [LAB53.md](LAB53.md) |
+| 54 | Enforced upload, tool, citation and approval boundary probes | [LAB54.md](LAB54.md) |
+| 55 | Standalone Docker deployment, health, origin policy and target smoke | [LAB55.md](LAB55.md) |
+| 56 | Persistent Research and Report Workspace with accounts and optional live sessions | [LAB56.md](LAB56.md) |
+
+Lab 56 includes password accounts, owned documents/investigations, source-scoped function tools, saved session mapping, root/child evidence, citation review, approved writes, report downloads, signed notification deduplication and retained evaluation reports. SQLite records survive restart. Fixture mode needs no key; optional live mode uses OPENAI_API_KEY. Source functions use environment none; sandbox, web/MCP and native plugin/skill integrations remain explicitly separate extensions.
+
+Use Node 24 or later. Run `npm run test:capstone`, `npm run eval:capstone` and `npm run build`. The existing course starts with `npm run dev`; the separate deployment starts with `npm run start:capstone` or the supplied Docker compose file. See [deployment instructions](capstone/deploy/README.md) for persistence, hosting, secrets, limits and cleanup. The local Docker target is verified; external hosting and live model execution are not claimed by fixture or contract tests.

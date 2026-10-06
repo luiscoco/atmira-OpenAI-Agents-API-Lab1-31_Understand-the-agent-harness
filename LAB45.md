@@ -4,6 +4,8 @@ Open the course application and choose Lab 45, or reload with `#lab45`. Start th
 
 ## Exercise
 
+Run `node --import tsx scripts/prepare-native-hooks.ts` to create an isolated project under `.lab-data/lab45-native-project`. Open that directory in a supported Codex runtime, review its exact hook in `/hooks`, and compare passing/failing report edits with the local invocation ledger and the native lifecycle trace. Preparation does not install hooks in the current project or change global runtime trust. Direct script execution remains separate from native dispatch evidence.
+
 Run both validation command buttons and inspect exit codes 0 and 2. Copy sandbox/lab45/project-hooks.json to .codex/hooks.json in an isolated project; copy the validator to sandbox/lab45/validate-report.mjs in that project. Create report.md with the Release report header and Total: 2800. In a supported Codex CLI, inspect and trust the command through /hooks; edit the total to 2801 and back using a matching file-edit tool. Record the native hook results.
 
 ## Evidence and student checkpoint
