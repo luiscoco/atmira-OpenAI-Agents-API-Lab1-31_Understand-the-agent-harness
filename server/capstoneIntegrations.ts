@@ -42,14 +42,27 @@ export function mcpText(output: unknown): string {
 export function officialSourceUrl(raw: unknown): string | null {
   try { if (typeof raw !== 'string' || raw.length > 2000) return null; const url = new URL(raw); return url.protocol === 'https:' && !url.username && !url.password && !url.port && integrationDomains.includes(url.hostname) ? url.href : null; } catch { return null; }
 }
+function failedMcpOutput(output: any): boolean {
+  if (typeof output === 'string') { try { return failedMcpOutput(JSON.parse(output)); } catch { return false; } }
+  return output?.isError === true;
+}
 export function externalSources(items: any[]): ExternalSource[] {
   const found: ExternalSource[] = [];
   const add = (raw: unknown, origin: ExternalSource['origin'], itemId: string, text = '') => { const url = officialSourceUrl(raw); if (url && found.length < 80 && !found.some(row => row.url === url && row.itemId === itemId)) found.push({ url, origin, itemId, text: text.slice(0, 50000) }); };
   for (const item of items) {
-    if (item.type === 'mcp_call' && item.server_label === 'openai_docs' && item.status === 'completed' && !item.error) {
-      // Only returned content establishes provenance; arguments and model-authored links do not.
+    if (item.type === 'mcp_call' && item.server_label === 'openai_docs' && item.status === 'completed' && !item.error && !failedMcpOutput(item.output)) {
+      // A successful document fetch binds returned text to its requested official URL.
+      // The page need not include a link to itself. Search arguments and generated links
+      // alone never establish provenance, and outgoing links do not inherit page text.
       const text = mcpText(item.output);
-      for (const match of text.matchAll(/https:\/\/[^\s<>"\\)\]]+/g)) add(match[0].replace(/[.,;]+$/, ''), 'mcp', item.id, text);
+      let args: any = item.arguments;
+      try { if (typeof args === 'string') args = JSON.parse(args); } catch { args = null; }
+      const fetchedUrl = item.name === 'fetch_openai_doc' && text.trim() ? officialSourceUrl(args?.url) : null;
+      if (fetchedUrl) add(fetchedUrl, 'mcp', item.id, text);
+      for (const match of text.matchAll(/https:\/\/[^\s<>"\\)\]]+/g)) {
+        const url = match[0].replace(/[.,;]+$/, '');
+        add(url, 'mcp', item.id, fetchedUrl && officialSourceUrl(url) !== fetchedUrl ? '' : text);
+      }
     }
     if (item.type === 'web_search_call' && item.status === 'completed') add(item.action?.url, 'web_search', item.id);
     if (item.type === 'message' && item.role === 'assistant') for (const part of item.content || []) for (const annotation of part.annotations || []) if (annotation.type === 'url_citation') add(annotation.url, 'web_search', item.id);

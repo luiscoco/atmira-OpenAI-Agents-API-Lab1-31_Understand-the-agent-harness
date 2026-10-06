@@ -22,6 +22,8 @@
     "verify:live": "node --import tsx scripts/verify-live-capstone.ts",
     "prepare:hooks": "node --import tsx scripts/prepare-native-hooks.ts",
     "eval:capstone": "node --import tsx scripts/evaluate-capstone.ts",
+    "eval:live": "node --import tsx scripts/evaluate-live-capstone.ts",
+    "verify:persistence": "node --import tsx scripts/check-capstone-persistence.ts",
     "start:capstone": "node --import tsx server/capstoneServer.ts",
     "smoke:capstone": "node --import tsx scripts/smoke-capstone.ts",
     "test:operations": "node --import tsx --test server/operations.integration.test.ts",

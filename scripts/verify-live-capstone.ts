@@ -18,13 +18,20 @@ try {
   const user = store.register(`live-${stamp}@example.test`, `verification-${randomUUID()}`).user.id;
   const workspace = store.createWorkspace(user, 'Labelled integration verification');
   store.upload(user, workspace.id, 'release.md', 'The course workspace preserves uploaded sources and requires owner approval before saving findings.');
-  const question = 'Explain how Agents API web search and MCP differ. Read the workspace source, use the built-in web_search tool (not just MCP search), and fetch a page using openai_docs. Return one document finding and one external finding with a single short exact source quote under 200 characters from the fetched page. Preserve literal punctuation. If native skills are available, read grounded-research and report-review and inspect the staged source.';
+const question = 'Explain how Agents API web search and MCP differ. Read the workspace source. Invoke the built-in web search capability once, even if documentation MCP search is also available. Fetch https://developers.openai.com/api/docs/guides/agents-api/tools/mcp using openai_docs.fetch_openai_doc. Return one document finding and one external finding citing that fetched page, with a single contiguous exact source quote of 8–120 characters copied from its returned text. Do not join excerpts, quote navigation links, or change whitespace or punctuation. If native skills are available, read grounded-research and report-review and inspect the exact staged source paths in the server runtime context. Explicitly disclose any unavailable capability.';
   const investigation = store.createInvestigation(user, workspace.id, question);
   const entry = store.createOperation(user, investigation.id, randomUUID(), question, 'live', { delegation: false, failure: false, profile });
   runner.start(user, entry.operation.id, false, false); await runner.jobs.get(entry.operation.id)!.done;
   let operation = store.publicOperation(user, entry.operation.id);
   if (operation.status === 'unknown' && store.investigation(user, investigation.id).session_id) { try { operation = await runner.inspect(user, entry.operation.id); } catch {} }
   report.operation = operation;
+  const retainedSession = store.investigation(user, investigation.id).session_id;
+  if (retainedSession) {
+    try {
+      const saved = await researchApi().inspect(retainedSession, AbortSignal.timeout(20000));
+      report.observedToolItems = saved.items.filter(item => ['mcp_call', 'web_search_call', 'command_execution'].includes(item.type));
+    } catch (error) { report.diagnosticError = String(error.message).slice(0, 500); }
+  }
   report.checks = {
     completed: operation.status === 'completed',
     documentCitation: operation.approvals.length > 0,

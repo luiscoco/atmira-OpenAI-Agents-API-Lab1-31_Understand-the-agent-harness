@@ -14,7 +14,7 @@ Hosted files are copied from the authenticated workspace into `/workspace/source
 
 Adding documents changes the workspace fingerprint. A retained hosted investigation rejects another run with changed source files; create a new investigation to stage the current documents. Recovery uses the attributed root turn and retains child failures independently.
 
-External findings have a separate review list. An observed tool URL establishes provenance; only exact text in MCP output establishes quote existence. Search annotations alone cannot verify the quoted text. Human review must establish whether the source supports the claim. The downloadable report labels external findings as requiring review. Approval proposals still require exact citations to owned uploaded documents.
+External findings have a separate review list. An observed tool URL establishes provenance; only exact text in MCP output establishes quote existence. A successful `openai_docs.fetch_openai_doc` binds its returned text to its requested official URL even when the page has no self-link. Failed or `isError` responses supply no evidence. Other links in a fetched page establish observed URLs but cannot borrow its text for quote verification. Search annotations alone cannot verify the quoted text. Human review must establish whether the source supports the claim. The downloadable report labels external findings as requiring review. Approval proposals still require exact citations to owned uploaded documents.
 
 ## Walkthrough snippets and narration
 
@@ -31,10 +31,13 @@ External findings have a separate review list. An observed tool URL establishes 
 node --import tsx --test server/capstone.integration.test.ts server/capstoneIntegrations.integration.test.ts server/operations.integration.test.ts
 node --import tsx scripts/verify-live-capstone.ts connected
 node --import tsx scripts/verify-live-capstone.ts hosted
+node --import tsx scripts/evaluate-live-capstone.ts
 node --import tsx scripts/smoke-capstone.ts http://localhost:8080 --out .lab-data/deployment-smoke.json
 ```
 
-Live verification creates one labelled account/source/investigation in an ignored SQLite file, runs one bounded provider session, exports actual checks to `.lab-data/live-<profile>-<id>.json`, and deletes that provider session. Local verification databases and JSON evidence remain for review. A missing call or read is a failed check, even if the root completes. Unknown connection outcomes are inspected before any further input. If session cleanup fails, use `scripts/reconcile-live-capstone.ts <verification-database>` to inspect and delete only that verification session. No session is created by reconciliation.
+Live verification creates one labelled account/source/investigation in an ignored SQLite file, runs one bounded provider session, exports actual checks and tool-output diagnostics to `.lab-data/live-<profile>-<id>.json`, and deletes that provider session. Local verification databases and JSON evidence remain for review. A missing call or read is a failed check, even if the root completes. Unknown connection outcomes are inspected before any further input. If session cleanup fails, use `scripts/reconcile-live-capstone.ts <verification-database>` to inspect and delete only sessions in that labelled live-verification or model-evaluation database. Cleanup retries only HTTP 409, at most three times; use `--attempts 1` for a single attempt. No session is created by reconciliation.
+
+`capstone/model-evaluation-dataset.json` adds four live model cases: release grounding, missing source support, source prompt injection and conflicting sources. `npm run eval:live` runs sequential bounded sources-profile sessions, checks the explicit quote/support/guidance/approval/report rubric, and retains `.lab-data/model-evaluation-<id>.json` plus its SQLite database. It stops after an uncertain outcome or failed session cleanup. These checks consume model usage and supplement the deterministic policy dataset; they do not establish semantic entailment or evaluate every acceptance criterion. Review the actual claims alongside the sources.
 
 For a deployment restart check, follow `capstone/deploy/README.md`. Use the actual external URL for hosted evidence; a localhost result does not establish external hosting.
 

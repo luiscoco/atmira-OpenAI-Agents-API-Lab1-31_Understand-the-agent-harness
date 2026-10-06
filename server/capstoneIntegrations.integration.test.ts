@@ -52,6 +52,18 @@ test('Failed hosted readiness never submits a question', async () => {
 });
 test('Native evidence cannot be established by a failed skill command', () => { assert.equal(nativeEvidence([{ type: 'command_execution', status: 'failed', command: 'cat grounded-research/SKILL.md' }]).skillReads.length, 0); });
 test('Structured MCP text preserves literal quotes and newlines for citation checks', () => { const output = { content: [{ type: 'text', text: `${url}\nThe user's report requires review.` }] }; assert.ok(mcpText(JSON.stringify(output)).includes("The user's report requires review.")); const sources = externalSources([{ type: 'mcp_call', id: 'mcp', server_label: 'openai_docs', status: 'completed', output }]); assert.equal(reviewExternalFindings([{ claim: 'Review required', url, quote: "The user's report requires review." }], sources).accepted[0].quoteVerified, true); });
+test('Successful document fetch verifies its canonical URL without a self-link; outgoing links cannot borrow its text', () => {
+  const other = 'https://developers.openai.com/api/docs/guides/agents-api/tools/mcp';
+  const item = { type: 'mcp_call', id: 'fetch', server_label: 'openai_docs', name: 'fetch_openai_doc', arguments: JSON.stringify({ url }), status: 'completed', output: { content: [{ type: 'text', text: `${text}\nSee ${other}` }] } };
+  const sources = externalSources([item]);
+  const reviewed = reviewExternalFindings([{ claim: 'Fetched page', url, quote: text }, { claim: 'Linked page', url: other, quote: text }], sources);
+  assert.equal(reviewed.accepted[0].quoteVerified, true);
+  assert.equal(reviewed.accepted[1].quoteVerified, false);
+  assert.equal(externalSources([{ ...item, status: 'failed' }]).length, 0);
+  assert.equal(externalSources([{ ...item, output: { isError: true, content: [{ text }] } }]).length, 0);
+  assert.equal(externalSources([{ ...item, output: JSON.stringify({ isError: true, content: [{ text }] }) }]).length, 0);
+  assert.equal(externalSources([{ ...item, name: 'search_openai_docs', output: { content: [{ text }] } }]).length, 0);
+});
 test('Initial input completed before stream subscription is recovered without a second submission', async () => {
   const w = workspace(); let sent = 0, streams = 0;
   const api: ResearchApi = { create: async request => { assert.equal(request.input, 'Research'); return { id: 'sess_initial' }; }, inspect: async () => ({ turns: [{ id: 'initial', subagent_id: null, status: 'completed' }], items: [{ turn_id: 'initial', type: 'message', role: 'assistant', content: [{ text: JSON.stringify({ findings: [{ claim: 'Search supported', documentId: w.doc.id, quote: text }], limitations: ['Observed initial result'] }) }] }] }), stream: async () => { streams++; throw new Error('Should not subscribe after saved completion'); }, send: async () => { sent++; }, remove: async () => {} };
