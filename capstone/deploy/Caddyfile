@@ -1,0 +1,4 @@
+{$CAPSTONE_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy workspace:8080
+}

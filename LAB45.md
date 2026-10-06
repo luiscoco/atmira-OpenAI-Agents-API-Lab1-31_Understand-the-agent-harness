@@ -16,6 +16,8 @@ Use **Export evidence and notes** to save observations. Run the browser and serv
 
 ## Implementation
 
+Run `npm run prepare:hooks` to prepare `.lab-data/lab45-native-project` while preserving existing report edits and the ledger. Review and trust the exact hook in the supported runtime, then use `apply_patch` to observe totals 2801 (failure) and 2800 (pass). Export the original Codex app-server JSONL notifications, including completed report edits and `hook/completed`. Run `npm run verify:hooks -- <notification-export.jsonl>` to correlate session, turn, tool-call IDs, project config paths, timestamps and outcomes. The resulting `native-hook-review.json` is an assessment of imported evidence; retain and review the original runtime trace. A direct command result or ledger alone remains insufficient.
+
 - `src/OperationsLab.tsx`: React exercise, controls, source labels and evidence export.
 - `src/operationsLabRules.ts`: shared deterministic rules and browser/server checks.
 - `src/operationsLessons.ts`: six narrated snippets for each lab.

@@ -45,7 +45,11 @@ For a deployment restart check, follow `capstone/deploy/README.md`. Use the actu
 
 Run `node --import tsx scripts/prepare-native-hooks.ts` to prepare an isolated Lab 45 project under `.lab-data/lab45-native-project`. Open that directory in a supported Codex runtime, review the exact hook using `/hooks`, and edit `report.md` with `apply_patch`. Observe both the passing total 2800 and failing total 2801. Compare `hook-invocations.jsonl` with the runtime lifecycle trace: direct invocation or a ledger entry alone is insufficient evidence of native dispatch. Preparation does not modify the user's global runtime configuration.
 
+The validator ledger now includes session, turn and tool-call IDs without prompt text or credentials. Preparation preserves an existing report and ledger. Export Codex app-server `item/completed` and `hook/completed` notifications in JSONL, then run `npm run verify:hooks -- <notification-export.jsonl>`. The verifier checks completed report edits, matching synchronous project hook runs, exact config paths, time intervals and both outcomes. Imported files do not authenticate native execution; compare `native-hook-review.json` with the original runtime. The notification shapes follow the official [app-server documentation](https://learn.chatgpt.com/docs/app-server).
+
 Lab 46 registers tools in a compatible browser and logs native execute calls separately from local button clicks. Verify discovery, report reading, filter changes and removal on leaving the lab. The registered actions use existing validated React handlers. A browser without the WebMCP API uses the labelled local fallback.
+
+The page now provides a checkpoint for native read/filter/reread within one registration lifetime. **Remove tools and retain evidence** waits for unregister results and retains the calls for export; failed removals remain incomplete. Stale handlers reject calls after closing. Confirm removal in the browser's Available site tools and compare the export with Sources / Recently used. Page-handler observations and local demo buttons alone do not authenticate browser discovery.
 
 ## Official references
 

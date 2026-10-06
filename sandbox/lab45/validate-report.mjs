@@ -8,6 +8,6 @@ const text = fixture >= 0 ? (process.argv[fixture + 1] === 'pass' ? '# Release r
 const passed = text.startsWith('# Release report\n') && /^Total: 2800$/m.test(text);
 // Keep local dispatch evidence beside this validator, never at a path supplied by hook input.
 // The ledger alone is not proof: compare it with the actual Codex lifecycle trace.
-if (fixture < 0) await appendFile(new URL('./hook-invocations.jsonl', import.meta.url), JSON.stringify({ recordedAt: new Date().toISOString(), event: event.hook_event_name, tool: event.tool_name, passed, source: 'hook stdin; corroborate with native runtime trace' }) + '\n');
+if (fixture < 0) await appendFile(new URL('./hook-invocations.jsonl', import.meta.url), JSON.stringify({ recordedAt: new Date().toISOString(), event: event.hook_event_name, tool: event.tool_name, sessionId: typeof event.session_id === 'string' ? event.session_id : null, turnId: typeof event.turn_id === 'string' ? event.turn_id : null, toolUseId: typeof event.tool_use_id === 'string' ? event.tool_use_id : null, passed, source: 'hook stdin; corroborate with native runtime trace' }) + '\n');
 console.log(JSON.stringify(passed ? { hookSpecificOutput: { hookEventName: 'PostToolUse', additionalContext: 'Report validation passed: header and total.' } } : { decision: 'block', reason: 'Report must contain the Release report header and Total: 2800. PostToolUse cannot undo the preceding edit.' }));
 process.exitCode = passed ? 0 : 2;

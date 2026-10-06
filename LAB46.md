@@ -14,6 +14,8 @@ Use **Export evidence and notes** to save observations. Run the browser and serv
 
 ## Implementation
 
+The native verification checkpoint records registration lifetimes separately from local demo calls. In a compatible browser, invoke read-report, set-filter to needs-review, then read-report again. Click **Remove tools and retain evidence**, confirm removal in Available site tools, and export the evidence. A complete checkpoint requires the same registration lifetime for native read/filter/reread and successful removal of both tools. Compare the export with browser Sources / Recently used. Re-registering creates a new lifetime; stale handlers reject execution and observations from different lifetimes cannot complete the checkpoint.
+
 - `src/OperationsLab.tsx`: React exercise, controls, source labels and evidence export.
 - `src/operationsLabRules.ts`: shared deterministic rules and browser/server checks.
 - `src/operationsLessons.ts`: six narrated snippets for each lab.

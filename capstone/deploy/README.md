@@ -42,6 +42,23 @@ Health: GET /api/capstone/health. Run the smoke script against the actual extern
 
 Add `--out .lab-data/deployment-smoke.json` to retain dated target evidence. The integrated live profiles are described in [CAPSTONE_INTEGRATIONS.md](../../CAPSTONE_INTEGRATIONS.md); run `scripts/verify-live-capstone.ts connected` or `hosted` from the repository root to check actual calls, citations and native reads with one temporary provider session. Fixture smoke and persistence checks do not establish those live capabilities.
 
+## HTTPS deployment on a Docker server
+
+`compose.production.yaml` adds a Caddy HTTPS reverse proxy, durable SQLite and certificate volumes, a read-only application filesystem and private container networking. Only the proxy publishes ports. Registration defaults to disabled. This is a deployment configuration; validating it locally does not establish external hosting.
+
+Select a Docker server and a DNS hostname that points to it. Allow incoming TCP ports 80 and 443 for certificate issuance and HTTPS. Store `CAPSTONE_DOMAIN` (hostname only) and any optional API secrets in a private environment file outside version control. Use the supplied production composition alone, rather than merging it with the local-port composition:
+
+```sh
+docker compose --project-name agents-course-capstone-production --env-file /private/capstone.env -f capstone/deploy/compose.production.yaml config --quiet
+docker compose --project-name agents-course-capstone-production --env-file /private/capstone.env -f capstone/deploy/compose.production.yaml up --build -d
+```
+
+For a controlled course bootstrap, temporarily set `CAPSTONE_ALLOW_REGISTRATION=true` in that private file, provision accounts and run the smoke script against the actual HTTPS origin. Set it back to `false` and run the same `up -d` command after provisioning. A fixture smoke requires registration; it should not be run against an instance with registration intentionally disabled. Verify login and report access for an existing account after closing registration. Keep one application replica and preserve all three named volumes across updates. The application's exact Host/Origin checks use `https://CAPSTONE_DOMAIN`; Caddy preserves the incoming Host when proxying to the application over HTTP.
+
+Caddy automatically requests and renews certificates once DNS and reachability are correct. Its persistent `/data` and `/config` volumes retain certificate state. See the official [reverse proxy quick-start](https://caddyserver.com/docs/quick-starts/reverse-proxy) and [Docker guidance](https://caddyserver.com/docs/running). No public service or DNS change is created by configuration validation.
+
+After building `agents-course-capstone:local`, run `npm run verify:production` for a separate disposable local test. It starts the same app image with a read-only filesystem, a writable SQLite volume and no published app port; Caddy proxies through a loopback-only HTTP port. It checks health, ownership, approval replay, report download and persistence across a real app-container restart, then removes only its uniquely named and labelled test resources. No API credentials are passed and no model or certificate authority is called. Startup failures retain bounded container diagnostics in the ignored `.lab-data` evidence. An existing restart checkpoint must be verified before this test can start. The test verifies proxy/application behavior; external HTTPS issuance still needs the selected DNS/server target.
+
 ## Limits, retention and cleanup
 
 Defaults: 100 course accounts, 20 workspaces/account, 40 investigations/workspace, eight sources and 250 KB/workspace, 100 KB/file, two active server jobs, five research requests/account/minute, 20 function calls/turn and three minutes of observation. Password sign-in attempts are rate limited. These application limits are not provider dollar-spend caps. Use provider controls separately.
